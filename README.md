@@ -1,8 +1,6 @@
-# SEIF10-Project3
-Project 3 - MERN Full-stack app
-
-(Kenzo's Branch)
+# HealthcarePal
+GA SEIF 10 Project 3 - MERN-based full-stack app
 
 ## Motivation
 
-Kenzo wrote this: "The healthcare app is an idea"
+HealthcarePal is a one-stop healthcare app for both patients and healthcare professionals to use, which covers appointment booking, appointment record-keeping and other things.
