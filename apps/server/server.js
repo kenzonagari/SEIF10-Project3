@@ -23,6 +23,15 @@ app.use(express.json()); //this is how Express interprets body from client side
 
 //* ROUTES
 
+// CREATE
+
+// READ
+
+// UPDATE
+
+// DELETE
+
+
 
 //---------------------
 //* Connect to Mongo
