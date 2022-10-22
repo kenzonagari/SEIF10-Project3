@@ -3,9 +3,12 @@ const express = require("express");
 const cors = require ("cors");
 const app = express();
 
+//* dotenv
+require('dotenv').config();
+
 //* Mongoose dependencies
 const mongoose = require("mongoose");
-const MONGO_URI = "mongodb+srv://kenzo_n:1234@cluster0.xeh6d2f.mongodb.net";
+const MONGO_URI = process.env.MONGO_URI;
 const db = mongoose.connection;
 
 const port = process.env.PORT ?? 3000;
