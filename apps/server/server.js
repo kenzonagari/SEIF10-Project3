@@ -62,12 +62,12 @@ app.get("/api/apptsummary/seed", async(req, res)=> {
     await ApptSummary.deleteMany({})
     const apptSummary = await ApptSummary.insertMany([{
         loginInfo: "6358d9e079d6f26ab0fb7bd6",
-    date: "1990/12/05",
-    time: "10.00",
-    purpose: "General Check-Up",
-    summary: "Vaccination",
-    prescriptionInfo: "NA",
-    billingInfo: 50
+        date: "1990/12/05",
+        time: "10.00",
+        purpose: "General Check-Up",
+        summary: "Vaccination",
+        prescriptionInfo: "NA",
+        billingInfo: 50
     }])
 })
 
@@ -75,14 +75,15 @@ app.get("/api/medprescription/seed", async(req, res) => {
     await MedPrescription.deleteMany({})
     const medPrescription = await MedPrescription.insertMany([{
         loginInfo: "6358d9e079d6f26ab0fb7bd6",
-    startDate: "2022/12/15",
-    duration: "5 days",
-    medicine: "panadol",
-    dosage: "2 times per day",
-    interval: "1 week",
-    instruction: "after meal"
+        startDate: "2022/12/15",
+        duration: "5 days",
+        medicine: "panadol",
+        dosage: "2 times per day",
+        interval: "1 week",
+        instruction: "after meal"
     }])
 })
+
 //* ROUTES
 
 // CREATE
@@ -111,10 +112,12 @@ app.post('/api/createProfile', async(req, res)=> {
         res.status(500).json({msg: "Server Error"})
     }
 })
+
 //create appointment date/time
 app.post("/api/book-appointment", async(req, res) => {
 
 })
+
 // READ
 //read user profile
 app.get('/api/createProfile', async(req, res) => {
@@ -135,6 +138,7 @@ app.get('/api/healthProfile', async (req, res)=> {
         res.status(500).json({error})
     }
 })
+
 // UPDATE
 app.put("/api/home/:id", async(req, res)=> {
 const {id} = req.params
@@ -150,6 +154,7 @@ try {
     res.status(500).json({msg: error})
 }
 })
+
 // DELETE
 
 
