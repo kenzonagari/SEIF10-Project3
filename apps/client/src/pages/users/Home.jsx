@@ -23,6 +23,7 @@ export default function Home () {
             <NavigationBar />
 
             <div className="user-profile">
+                <h1>Home</h1>
                 <p>First Name: </p>
                 <p>Last Name: </p>
                 <p>NRIC/FIN: </p>
