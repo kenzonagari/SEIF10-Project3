@@ -1,6 +1,13 @@
 import { Navbar } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 export default function NavigationBar () {
+    const navigate = useNavigate();
+
+    const handleLink = () => {
+        navigate('/admin/userProfileUpdate');
+    }
+
     return (
         <>
             <Navbar>
@@ -30,6 +37,9 @@ export default function NavigationBar () {
                         <p>98765432</p>
                     </li>
                 </ul>
+
+                <button type="button" className="btn btn-primary" onClick={handleLink}>Update User Profile</button>
+
             </Navbar>
             <div className="appt-info body">
 

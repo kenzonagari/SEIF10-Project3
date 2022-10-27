@@ -1,14 +1,20 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import CreateProfile from './pages/users/CreateProfile'
+
 import Header from './pages/Header'
+import Footer from './pages/Footer'
+
+import CreateProfile from './pages/users/CreateProfile'
 import Home from './pages/users/Home'
 import Signin from './pages/users/Signin'
 import Signup from './pages/users/Signup'
 import HealthProfile from './pages/users/HealthProfile'
 import BookAppointment from './pages/users/BookAppointment'
+
 import AdminHome from './pages/admin/Home'
 import UserAppointment from './pages/admin/UserAppointment'
+import UserApptUpdate from './pages/admin/UserApptUpdate'
+import UserProfileUpdate from './pages/admin/UserProfileUpdate'
 
 function App() {
 
@@ -25,8 +31,11 @@ function App() {
           <Route path="/bookAppointment" element={<BookAppointment />} />
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/userAppointment" element={<UserAppointment />} />
+          <Route path="/admin/userApptUpdate" element={<UserApptUpdate />} />
+          <Route path="/admin/userProfileUpdate" element={<UserProfileUpdate />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </div>
   )
 }

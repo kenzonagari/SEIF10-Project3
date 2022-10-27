@@ -1,6 +1,6 @@
 import NavigationBar from "./Navbar"
 import { useState } from "react"
-import './body.css'
+import '../body.css'
 
 export default function Home () {
     const [toggle, setToggle] = useState(true);

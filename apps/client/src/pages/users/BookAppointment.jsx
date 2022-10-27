@@ -1,5 +1,5 @@
 import NavigationBar from "./Navbar"
-import './body.css'
+import '../body.css'
 
 export default function BookAppointment () {
     return(
