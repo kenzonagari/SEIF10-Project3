@@ -41,6 +41,13 @@ router.post('/', async(req, res)=> {
     }
 })
 
+router.post('/logout', (req, res)=> {
+    req.session.destroy((err)=> {
+        if(err) throw err;
+        res.json("Logged Out!")
+    })
+})
+
 // READ
 router.get('/', isAuth, async(req, res) => {
     try {
