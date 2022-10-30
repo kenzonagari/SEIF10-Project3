@@ -27,17 +27,17 @@ router.get("/seed", async(req, res) => {
 // ROUTES
 // CREATE
 router.post('/', async(req, res) => {
-    if (req.body.username === " ") {
-        res.status(400).json({msg: "No name"})
-        return
-    } 
+    //conditionals - input check
+    if (req.body.username.length < 3 || req.body.firstname.length === 0 || req.body.lastname.length === 0) {
+        res.status(400).json({msg: "No name"});
+        return;
+    }
     req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(saltRounds));
     try {
-
-        const signup = await UserLogin.create(req.body)
-        res.status(200).json(signup)
+        const signup = await UserLogin.create(req.body);
+        res.status(200).json(signup);
     } catch (error) {
-        res.status(500).json({msg: "Server Error"})
+        res.status(500).json({msg: error});
     }
 })
 
