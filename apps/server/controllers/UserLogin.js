@@ -40,6 +40,7 @@ router.get("/seed", async(req, res) => {
             lastname: "lee",
             email: "jiayi@gmail.com",
             password: bcrypt.hashSync("123", saltRounds),
+            confirmpassword: password,
             role: "user"
     }]);
     res.json(userlogin)
@@ -47,21 +48,31 @@ router.get("/seed", async(req, res) => {
 
 // ROUTES
 // CREATE
+//sign-up
 router.post('/', async(req, res) => {
+    const {firstname, lastname, username, email, password, confirmpassword} = req.body
     //conditionals - input check
-    if (req.body.username.length < 3 || req.body.firstname.length === 0 || req.body.lastname.length === 0) {
-        res.status(400).json({msg: "No name"});
-        return;
-    }
-    req.body.password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(saltRounds));
     try {
-        const signup = await UserLogin.create(req.body);
+    const existingUser = await UserLogin.findOne({email})
+    if (existingUser) return res.status(400).json({msg: "User already exists"})
+    if (username.length < 3 || firstname.length === 0 || lastname.length === 0) {
+      return res.status(400).json({msg: "Length of username must be more than 3 and fill in your name!"}) }
+    if (password !== confirmpassword) return res.status(400).json({msg: "Password incorrect!"})
+    const hashedPassword = await bcrypt.hash(password, bcrypt.genSaltSync(saltRounds));
+    
+        const signup = await UserLogin.create({
+            firstname,
+            lastname,
+            username,
+            email,
+            password: hashedPassword
+        });
         res.status(200).json(signup);
     } catch (error) {
         res.status(500).json({msg: error})
     }
 })
-
+// sign-in
 router.post('/signin', async(req, res) => {
     const { email, password} = req.body
     try {
@@ -90,15 +101,7 @@ router.get('/', async(req, res) => {
     }
     })
 
-    router.get('/signin', async(req, res) => {
     
-        try {
-            const users = await UserLogin.find().exec()
-            res.status(200).json(users)
-        } catch (error) {
-            res.status(500).json({msg: error})
-        }
-        })   
 
 // Update
 router.put('/:id', async(req, res)=> {
