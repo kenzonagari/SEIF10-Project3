@@ -1,9 +1,9 @@
 export default function Footer () {
     return (
         <>
-            <div className="header">
+            <footer className="text-center text-lg-start bg-white text-muted">
                 <p>HealthcarePal</p>
-            </div>
+            </footer>
         </>
     )
 }

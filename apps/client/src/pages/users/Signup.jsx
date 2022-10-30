@@ -36,67 +36,63 @@ export default function Signup () {
                         setStatus(401);
                     } else 
                     if(response.status === 200){
-                        console.log('yay');
+                        // console.log('yay');
                         // navigate(`/holidays`);
                     } else 
                     if(response.status === 500){
-                        console.log(response);
+                        setStatus(500);
+                        // console.log(response);
                         // navigate(`/holidays`);
                     }
-                    return;
                 })
-                .then();
+                .then((data) => console.log(data));
         } else {
             setStatus("no input");
         }
     }
 
     return(
-        <Card>
+        <div className="card m-4 p-4" style={{ width: "30rem" }}>
             <h1>Sign Up</h1>
             <Form onSubmit={handleSubmit}>
-
-                <Form.Group className="mx-1 mx-md-4">
-
-                    <div className="col-md-4">
+               
+                    <div className="mb-3">
                         <Form.Label>First Name</Form.Label>
                         <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Form.Label>Confirm Password</Form.Label>
                         <Form.Control type="password" placeholder="Re-enter password" required/>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="mb-3">
                         <Button variant="primary" type="submit" >
                             Sign Up
                         </Button>
                     </div>
-
-                </Form.Group>
-
+       
             </Form>
-        </Card>
+        </div>
     )
 }
