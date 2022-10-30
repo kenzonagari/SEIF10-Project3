@@ -2,7 +2,17 @@
 const express = require("express");
 const router = express.Router();
 const UserProfile = require("../models/UserProfile.js");
+const UserLogin = require('./UserLogin.js'); 
+const session = require("express-session")
 
+// MIDDLEWARE
+const isAuth = (req, res, next) => {
+    if (req.session.isAuth){
+        next()
+    } else {
+        res.json("Not Authorized!")
+    }
+}
 //* SEED
 router.get("/seed", async(req, res) => {
     await UserProfile.deleteMany({});
@@ -11,7 +21,7 @@ router.get("/seed", async(req, res) => {
             loginInfo: "6358d9e079d6f26ab0fb7bd6",
             mobile: "95558555",
             ic: "S2345675F",
-            dateOfBirth: "2022/12/15",
+            dateOfBirth: "2022/12/20",
             sex: "F",
             medAllergies: "NA",
             pastIllnesses: "NA"
@@ -32,7 +42,7 @@ router.post('/', async(req, res)=> {
 })
 
 // READ
-router.get('/', async(req, res) => {
+router.get('/', isAuth, async(req, res) => {
     try {
         const users = await UserProfile.find().exec()
         res.status(200).json(users)
@@ -56,6 +66,21 @@ router.put('/:id', async(req, res)=> {
         res.status(500).json({msg: error})
     }
     })
+// admin update user profile
+router.put('/admin/:id', async(req, res) => {
+    const {id} = req.params
+    try {
+        const adminupdate = await UserProfile.findByIdAndUpdate(id);
+        if (adminupdate === null) {
+            res.status(400).json({msg: "Wrong ID"})
+        } else {
+            res.status(204).json(adminupdate)
+        }
+    } catch (error) {
+        res.status(500).json({msg: error})
+    }
+})
+
 // DELETE
     router.delete('/:id', async(req, res)=> {
         const {id} = req.params

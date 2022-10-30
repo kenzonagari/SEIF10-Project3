@@ -4,7 +4,7 @@ const cors = require ("cors");
 const app = express();
 
 //* dotenv
-require('dotenv').config();
+require("dotenv").config();
 
 //* Mongoose dependencies
 const mongoose = require("mongoose");
@@ -25,7 +25,7 @@ app.use(express.json()); //this is how Express interprets body from client side
 
 //* CONTROLLERS
 const UserLogin = require('./controllers/UserLogin.js'); 
-app.use('/api/userlogin', UserLogin);
+app.use('/', UserLogin);
 const UserProfile = require('./controllers/UserProfile.js'); 
 app.use('/api/userprofile', UserProfile);
 const ApptSummary = require('./controllers/ApptSummary.js'); 
