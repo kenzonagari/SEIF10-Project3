@@ -1,7 +1,10 @@
-import { Card, Form, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateProfile () {
+    const [error, setError] = useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,6 +22,8 @@ export default function CreateProfile () {
         if(userLoginObj.pastIllnesses === ""){
             userLoginObj.pastIllnesses = "NA";
         }
+
+
 
         console.log(userLoginObj);
         loginIsValid = true;
@@ -70,32 +75,42 @@ export default function CreateProfile () {
                 </fieldset>
 
                 <div className="mb-3">
-                    <Form.Label>Date Of Birth</Form.Label>
-                    <Form.Control type="text" id="dateOfBirth" name="dateOfBirth" placeholder="date of birth" required/>
+                    <Form.Label>Date Of Birth*</Form.Label>
+                    <div className="row">
+                        <div className="col">
+                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="DD" min="1" max="31" required/>
+                        </div>
+                        <div className="col">
+                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="MM" min="1" max="12" required/>
+                        </div>
+                        <div className="col">
+                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY" min="1900" max="2022" required/>
+                        </div>
+                    </div>
                 </div>
         
                 <div className="form-group col-md-4 mb-3">
-                    <label className='form-label'>Sex</label>
+                    <label className='form-label'>Sex*</label>
                     <select className="form-select mb-3" id="sex" name="sex" required>
                         <option value=""></option>
-                        <option value="male">M</option>
-                        <option value="female">F</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
                         <option value="nonbinary">Non-Binary</option>
                     </select>
                 </div>
             
                 <div className="mb-3">
-                    <Form.Label>Mobile No.</Form.Label>
+                    <Form.Label>Mobile No*</Form.Label>
                     <Form.Control type="text" id="mobile" name="mobile" placeholder="12345678" required/>
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Medication Allergies</Form.Label>
+                    <Form.Label>Medication Allergies*</Form.Label>
                     <textarea className="form-control" type="text" id="medAllergies" name="medAllergies" defaultValue="NA" />
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Past Illnesses</Form.Label>
+                    <Form.Label>Past Illnesses*</Form.Label>
                     <textarea className="form-control" type="text" id="pastIllnesses" name="pastIllnesses" defaultValue="NA" />
                 </div>
          
