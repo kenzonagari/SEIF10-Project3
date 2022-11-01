@@ -50,7 +50,7 @@ router.get("/seed", async(req, res) => {
 // CREATE
 //sign-up
 router.post('/', async(req, res) => {
-    const {firstname, lastname, username, email, password} = req.body
+    const {firstname, lastname, username, email, password} = req.body;
 
     //conditionals - input check
     const existingUsername = await UserLogin.findOne({username});
@@ -82,7 +82,7 @@ router.post('/', async(req, res) => {
             email,
             password: hashedPassword
         });
-        res.status(200).json({msg: "login successful"});
+        res.status(200).json({msg: "Sign up successful"});
     } catch (error) {
         res.status(500).json({msg: error});
     };
@@ -90,21 +90,24 @@ router.post('/', async(req, res) => {
 
 // sign-in
 router.post('/signin', async(req, res) => {
-    const { email, password} = req.body
+    const { email, password } = req.body;
     try {
         const user = await UserLogin.findOne({email});
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!user || !isMatch) {
-            res.status(401).json("Email/Password not found/match!")
+        if (!user) {
+            return res.status(401).json({msg: "Email not found"});
+        } else {
+            const passwordMatch = bcrypt.compareSync(password, user.password);
+            if (passwordMatch === false) {
+                return res.status(401).json({msg: "Incorrect password"});
+            }
         }
-        req.session.isAuth = true
-        console.log(req.session.cookie)
-         res.status(200).json("Sign in successfully!")
+        req.session.isAuth = true;
+        console.log(req.session.cookie);
+        return res.status(200).json({msg: "Sign in successful", user: user});
     } catch (error) {
-        res.status(500).json({msg: error});
+        return res.status(500).json({msg: error});
     }
-   
-})
+});
 
 // READ
 router.get('/', async(req, res) => {

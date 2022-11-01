@@ -1,4 +1,4 @@
-import { Card, Form, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,9 +17,9 @@ export default function Signup () {
     const handleSubmit = (event) => {
         event.preventDefault();
         setDisableButton(true);
+
         let myFormData = new FormData(event.target);
         let userLoginObj = Object.fromEntries(myFormData.entries());
-        
         let loginIsValid = false;
         
         //conditionals
@@ -51,14 +51,14 @@ export default function Signup () {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data);
                     if(data.msg === "Username already taken"){
                         setError(warningText.usernameTaken);
                     } else 
                     if(data.msg === "Email already taken"){
                         setError(warningText.emailTaken);
                     } else 
-                    if(data.msg === "login successful"){
+                    if(data.msg === "Sign up successful"){
+                        setError("");
                         return;
                     }
                     setDisableButton(false);
@@ -84,45 +84,45 @@ export default function Signup () {
             <h1>Sign Up</h1>
             <Form onSubmit={handleSubmit}>
                
-                    <div className="mb-3">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
-                        {error === warningText.usernameTooShort ? warningPopup : ""}
-                        {error === warningText.usernameTaken ? warningPopup : ""}
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
+                    {error === warningText.usernameTooShort ? warningPopup : ""}
+                    {error === warningText.usernameTaken ? warningPopup : ""}
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
-                        {error === warningText.emailTaken ? warningPopup : ""}
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
+                    {error === warningText.emailTaken ? warningPopup : ""}
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
-                        {error === warningText.passwordMatch ? warningPopup : ""}
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
+                    {error === warningText.passwordMatch ? warningPopup : ""}
+                </div>
 
-                    <div className="mb-3">
-                        <Button variant="primary" type="submit" disabled={disableButton}>
-                            Sign Up
-                        </Button>
-                    </div>
+                <div className="mb-3">
+                    <Button variant="primary" type="submit" disabled={disableButton}>
+                        Sign Up
+                    </Button>
+                </div>
        
             </Form>
         </div>
