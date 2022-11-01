@@ -2,14 +2,14 @@ import { Navbar } from 'react-bootstrap'
 
 export default function HeaderFunction () {
     return(
-        <Navbar className="bg-danger d-flex flex-wrap justify-content-between align-items-center" style={{"--bs-bg-opacity": .3}}>
+        <Navbar className="bg-secondary d-flex flex-wrap justify-content-between align-items-center" style={{"--bs-bg-opacity": .1}}>
 
-            <a className="navbar-brand h1 mx-4" href="#">
+            <a className="navbar-brand h1 mx-4 my-0" href="#">
                 <h1>
                     HealthcarePal
                 </h1>
             </a>
-            <a className="navbar-brand h1 mx-4" href="#">Username</a>
+            <a className="navbar-brand h1 mx-4 my-0" href="#">Username</a>
 
         </Navbar>
     )

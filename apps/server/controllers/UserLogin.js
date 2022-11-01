@@ -92,15 +92,19 @@ router.post('/', async(req, res) => {
 router.post('/signin', async(req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await UserLogin.findOne({email});
+        let user = await UserLogin.findOne({"email": email});
         if (!user) {
-            return res.status(401).json({msg: "Email not found"});
-        } else {
-            const passwordMatch = bcrypt.compareSync(password, user.password);
-            if (passwordMatch === false) {
-                return res.status(401).json({msg: "Incorrect password"});
+            user = await UserLogin.findOne({"username": email});
+            if(!user){
+                return res.status(401).json({msg: "Email not found"});
             }
         }
+
+        const passwordMatch = bcrypt.compareSync(password, user.password);
+        if (passwordMatch === false) {
+            return res.status(401).json({msg: "Incorrect password"});
+        }
+        
         req.session.isAuth = true;
         console.log(req.session.cookie);
         return res.status(200).json({msg: "Sign in successful", user: user});

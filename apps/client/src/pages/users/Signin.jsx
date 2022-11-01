@@ -3,13 +3,18 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const warningText = {
-    emailNotFound: "Email address not found. Please check and try again.",
+    emailNotFound: "Email address or username not found. Please check and try again.",
     incorrectPassword: "Incorrect password. Please try again.",
 }
 
 export default function Signin () {
+    const navigate = useNavigate();
     const [error, setError] = useState("");
     const [disableButton, setDisableButton] = useState(false);
+
+    const handleClick = () => {
+        navigate("/signup");
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -69,8 +74,8 @@ export default function Signin () {
 
             <Form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <Form.Label>Email Address</Form.Label>
-                    <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
+                    <Form.Label>Email Address or Username</Form.Label>
+                    <Form.Control type="text" id="email" name="email" placeholder="Enter email address or username" required/>
                 </div>
 
                 <div className="mb-3">
@@ -89,6 +94,7 @@ export default function Signin () {
                     </Button>
                 </div>
             </Form>
+            <p>Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
         </div>
     )
 }

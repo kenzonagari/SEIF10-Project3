@@ -80,40 +80,54 @@ export default function Signup () {
         </div>;
 
     return(
-        <div className="card m-4 p-4" style={{ width: "30rem" }}>
-            <h1>Sign Up</h1>
+        <div className="card m-4 p-4" style={{ width: "35rem" }}>
+
+            <div className="mb-3">
+                <h1>Sign Up</h1>
+            </div>
+
             <Form onSubmit={handleSubmit}>
-               
-                <div className="mb-3">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
+                <div className="row">
+                    <div className="col">
+                        <div className="mb-3">
+                            <Form.Label>First Name*</Form.Label>
+                            <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
+                        </div>
+                    </div>
+                    <div className="col">
+                        <div className="mb-3">
+                            <Form.Label>Last Name*</Form.Label>
+                            <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
-                </div>
 
-                <div className="mb-3">
-                    <Form.Label>Username</Form.Label>
+
+                <div className="mb-3 col">
+                    <Form.Label>Username*</Form.Label>
+                    <br></br>
+                    <Form.Text className="text-muted">
+                        Username must at least be 3 letters long
+                    </Form.Text>
                     <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
                     {error === warningText.usernameTooShort ? warningPopup : ""}
                     {error === warningText.usernameTaken ? warningPopup : ""}
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Email Address</Form.Label>
+                    <Form.Label>Email Address*</Form.Label>
                     <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
                     {error === warningText.emailTaken ? warningPopup : ""}
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password*</Form.Label>
                     <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>Confirm Password*</Form.Label>
                     <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
                     {error === warningText.passwordMatch ? warningPopup : ""}
                 </div>
@@ -125,6 +139,7 @@ export default function Signup () {
                 </div>
        
             </Form>
+            <p>Already have an account? <a href="/signin">Sign in here.</a></p>
         </div>
     )
 }
