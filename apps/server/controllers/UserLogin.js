@@ -1,4 +1,3 @@
-
 //* bcrypt dependencies
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -14,21 +13,22 @@ const MONGO_URI = process.env.MONGO_URI;
 const express = require("express");
 const router = express.Router();
 const UserLogin = require("../models/UserLogin");
-const session = require("express-session")
-const MongodbSession = require("connect-mongodb-session")(session)
+const session = require("express-session");
+// const MongodbSession = require("connect-mongodb-session")(session);
 
 //* MIDDLEWARE
 
-const store = new MongodbSession({
-    uri: MONGO_URI,
-    collection: "mySessions"
-})
+// const store = new MongodbSession({
+//     uri: MONGO_URI,
+//     collection: "mySessions"
+// });
+
 router.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    store: store
-}))
+    // store: store
+}));
 
 //* SEED
 router.get("/seed", async(req, res) => {
@@ -50,16 +50,31 @@ router.get("/seed", async(req, res) => {
 // CREATE
 //sign-up
 router.post('/', async(req, res) => {
-    const {firstname, lastname, username, email, password, confirmpassword} = req.body
+    const {firstname, lastname, username, email, password} = req.body
+
     //conditionals - input check
-    try {
-    const existingUser = await UserLogin.findOne({email})
-    if (existingUser) return res.status(400).json({msg: "User already exists"})
-    if (username.length < 3 || firstname.length === 0 || lastname.length === 0) {
-      return res.status(400).json({msg: "Length of username must be more than 3 and fill in your name!"}) }
-    if (password !== confirmpassword) return res.status(400).json({msg: "Password incorrect!"})
+    const existingUsername = await UserLogin.findOne({username});
+    const existingEmail = await UserLogin.findOne({email});
+
+    if (existingUsername) {
+        return res.status(401).json({msg: "Username already taken"}); //401 - unauthorized
+    }
+
+    if (existingEmail) {
+        return res.status(401).json({msg: "Email already taken"});
+    }
+
+    if (username.length < 3) {
+        return res.status(401).json({msg: "Length of username must be at least 3 letters"}); 
+    }
+
+    if (firstname.length === 0 || lastname.length === 0) {
+        return res.status(401).json({msg: "Please provide a full name"}); 
+    }
+
     const hashedPassword = await bcrypt.hash(password, bcrypt.genSaltSync(saltRounds));
     
+    try {
         const signup = await UserLogin.create({
             firstname,
             lastname,
@@ -67,11 +82,12 @@ router.post('/', async(req, res) => {
             email,
             password: hashedPassword
         });
-        res.status(200).json(signup);
+        res.status(200).json({msg: "login successful"});
     } catch (error) {
-        res.status(500).json({msg: error})
-    }
-})
+        res.status(500).json({msg: error});
+    };
+});
+
 // sign-in
 router.post('/signin', async(req, res) => {
     const { email, password} = req.body
@@ -118,6 +134,7 @@ router.put('/:id', async(req, res)=> {
         res.status(500).json({msg: error})
     }
     })
+
 // DELETE
     router.delete('/:id', async(req, res)=> {
         const {id} = req.params

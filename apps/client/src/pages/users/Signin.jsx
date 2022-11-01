@@ -8,7 +8,7 @@ export default function Signin () {
     }
 
     return(
-        <Card>
+        <div className="card m-4 p-4" style={{ width: "30rem" }}>
             <h1>Sign In</h1>
 
             <Form onSubmit={handleSubmit}>
@@ -28,6 +28,6 @@ export default function Signin () {
                 </Button>
 
             </Form>
-        </Card>
+        </div>
     )
 }

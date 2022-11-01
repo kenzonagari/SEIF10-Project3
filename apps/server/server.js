@@ -25,7 +25,7 @@ app.use(express.json()); //this is how Express interprets body from client side
 
 //* CONTROLLERS
 const UserLogin = require('./controllers/UserLogin.js'); 
-app.use('/', UserLogin);
+app.use('/api/userlogin', UserLogin);
 const UserProfile = require('./controllers/UserProfile.js'); 
 app.use('/api/userprofile', UserProfile);
 const ApptSummary = require('./controllers/ApptSummary.js'); 
