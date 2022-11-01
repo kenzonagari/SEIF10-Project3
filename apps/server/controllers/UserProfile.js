@@ -44,7 +44,7 @@ router.post('/', async(req, res)=> {
 router.post('/logout', (req, res)=> {
     req.session.destroy((err)=> {
         if(err) throw err;
-        res.json("Logged Out!")
+        res.json({msg: "Logged Out!"})
     })
 })
 
@@ -89,20 +89,20 @@ router.put('/admin/:id', async(req, res) => {
 })
 
 // DELETE
-    router.delete('/:id', async(req, res)=> {
-        const {id} = req.params
-        try {
-            const deleteuser = await UserProfile.findByIdAndDelete(id);
-            if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
-            } else {
-                res.status(204).json(deleteuser)
-            }
-        
-        } catch (error){
-            res.status(500).json({msg: error})
+router.delete('/:id', async(req, res)=> {
+    const {id} = req.params
+    try {
+        const deleteuser = await UserProfile.findByIdAndDelete(id);
+        if (updateuser === null) {
+            res.status(400).json({msg: "Wrond ID"})
+        } else {
+            res.status(204).json(deleteuser)
         }
-        })
     
+    } catch (error){
+        res.status(500).json({msg: error})
+    }
+})
+
 // EXPORT
 module.exports = router;

@@ -2,25 +2,42 @@ import { Card, Form, Button } from 'react-bootstrap'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const warningText = {
+    usernameTooShort: "Username needs to have at least 3 letters!",
+    passwordMatch: "Password does not match!",
+    usernameTaken: "Username already taken!",
+    emailTaken: "Email already taken!"
+}
+
 export default function Signup () {
     const navigate = useNavigate();
-    const [status, setStatus] = useState(0);
+    const [error, setError] = useState("");
+    const [disableButton, setDisableButton] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const myFormData = new FormData(event.target);
-        const userLoginObj = Object.fromEntries(myFormData.entries());
-        console.log(userLoginObj);
-
+        setDisableButton(true);
+        let myFormData = new FormData(event.target);
+        let userLoginObj = Object.fromEntries(myFormData.entries());
+        
         let loginIsValid = false;
-
+        
         //conditionals
 
         if(userLoginObj.username.length < 3){
-            console.log("username needs to have more than 3 letters!");
+            setError(warningText.usernameTooShort);
+            setDisableButton(false);
+            return;
+        } else 
+        if(userLoginObj.password !== userLoginObj.confirmPassword){
+            setError(warningText.passwordMatch);
+            setDisableButton(false);
+            return;
         } else {
+            delete userLoginObj.confirmPassword; //remove confirmPassword from object
             loginIsValid = true;
         }
+        
 
         //* only fire off request when input is valid:
         if(loginIsValid){
@@ -31,25 +48,36 @@ export default function Signup () {
                                         body: JSON.stringify(userLoginObj) 
                                     })
                 .then((response) => {
-                    response.json();
-                    if(response.status === 401){
-                        setStatus(401);
-                    } else 
-                    if(response.status === 200){
-                        // console.log('yay');
-                        // navigate(`/holidays`);
-                    } else 
-                    if(response.status === 500){
-                        setStatus(500);
-                        // console.log(response);
-                        // navigate(`/holidays`);
-                    }
+                    return response.json();
                 })
-                .then((data) => console.log(data));
+                .then((data) => {
+                    console.log(data);
+                    if(data.msg === "Username already taken"){
+                        setError(warningText.usernameTaken);
+                    } else 
+                    if(data.msg === "Email already taken"){
+                        setError(warningText.emailTaken);
+                    } else 
+                    if(data.msg === "login successful"){
+                        return;
+                    }
+                    setDisableButton(false);
+                    return;
+                })
         } else {
-            setStatus("no input");
+            setError("no input");
+            setDisableButton(false);
         }
     }
+
+    const warningPopup = 
+        <div id="passwordHelpBlock" className="form-text ">
+            {error === warningText.usernameTooShort ? error :
+                error === warningText.passwordMatch ? error : 
+                error === warningText.usernameTaken ? error :
+                error === warningText.emailTaken ? error : ""
+            }
+        </div>;
 
     return(
         <div className="card m-4 p-4" style={{ width: "30rem" }}>
@@ -69,11 +97,14 @@ export default function Signup () {
                     <div className="mb-3">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
+                        {error === warningText.usernameTooShort ? warningPopup : ""}
+                        {error === warningText.usernameTaken ? warningPopup : ""}
                     </div>
 
                     <div className="mb-3">
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
+                        {error === warningText.emailTaken ? warningPopup : ""}
                     </div>
 
                     <div className="mb-3">
@@ -83,11 +114,12 @@ export default function Signup () {
 
                     <div className="mb-3">
                         <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" placeholder="Re-enter password" required/>
+                        <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
+                        {error === warningText.passwordMatch ? warningPopup : ""}
                     </div>
 
                     <div className="mb-3">
-                        <Button variant="primary" type="submit" >
+                        <Button variant="primary" type="submit" disabled={disableButton}>
                             Sign Up
                         </Button>
                     </div>
