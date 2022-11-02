@@ -59,6 +59,7 @@ export default function Signup () {
                     } else 
                     if(data.msg === "Sign up successful"){
                         setError("");
+                        navigate("/createprofile");
                         return;
                     }
                     setDisableButton(false);
@@ -71,7 +72,7 @@ export default function Signup () {
     }
 
     const warningPopup = 
-        <div id="passwordHelpBlock" className="form-text ">
+        <div id="passwordHelpBlock" className="form-text text-danger">
             {error === warningText.usernameTooShort ? error :
                 error === warningText.passwordMatch ? error : 
                 error === warningText.usernameTaken ? error :
@@ -80,9 +81,9 @@ export default function Signup () {
         </div>;
 
     return(
-        <div className="card m-4 p-4" style={{ width: "35rem" }}>
+        <div className="card m-4 p-4 mx-auto" style={{ width: "35rem" }}>
 
-            <div className="mb-3">
+            <div className="mb-3 text-center">
                 <h1>Sign Up</h1>
             </div>
 
@@ -132,14 +133,14 @@ export default function Signup () {
                     {error === warningText.passwordMatch ? warningPopup : ""}
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 text-center">
                     <Button variant="primary" type="submit" disabled={disableButton}>
                         Sign Up
                     </Button>
                 </div>
        
             </Form>
-            <p>Already have an account? <a href="/signin">Sign in here.</a></p>
+            <p className="mb-3 text-center">Already have an account? <a href="/signin">Sign in here.</a></p>
         </div>
     )
 }

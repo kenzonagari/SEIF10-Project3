@@ -30,9 +30,9 @@ export default function CreateProfile () {
     }
 
     return(
-        <div className="card m-4 p-5" style={{ width: "60rem" }}>
+        <div className="card m-4 p-5 mx-auto" style={{ width: "50rem" }}>
 
-            <div className="mb-3">
+            <div className="mb-3 text-center">
                 <h1>Complete Your Profile</h1>
             </div>
 
@@ -88,33 +88,38 @@ export default function CreateProfile () {
                         </div>
                     </div>
                 </div>
-        
-                <div className="form-group col-md-4 mb-3">
-                    <label className='form-label'>Sex*</label>
-                    <select className="form-select mb-3" id="sex" name="sex" required>
-                        <option value=""></option>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="nonbinary">Non-Binary</option>
-                    </select>
+
+                <div className='row'>
+                    <div className='col'>
+                        <div className="form-group col-md-8 mb-3">
+                            <label className='form-label'>Sex*</label>
+                            <select className="form-select mb-3" id="sex" name="sex" required>
+                                <option value=""></option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="nonbinary">Non-Binary</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className='col'>
+                        <div className="mb-3 md-10">
+                            <Form.Label>Mobile No*</Form.Label>
+                            <Form.Control type="text" id="mobile" name="mobile" placeholder="12345678" required/>
+                        </div>
+                    </div>
                 </div>
             
                 <div className="mb-3">
-                    <Form.Label>Mobile No*</Form.Label>
-                    <Form.Control type="text" id="mobile" name="mobile" placeholder="12345678" required/>
-                </div>
-
-                <div className="mb-3">
-                    <Form.Label>Medication Allergies*</Form.Label>
+                    <Form.Label>Medication Allergies</Form.Label>
                     <textarea className="form-control" type="text" id="medAllergies" name="medAllergies" defaultValue="NA" />
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Past Illnesses*</Form.Label>
+                    <Form.Label>Past Illnesses</Form.Label>
                     <textarea className="form-control" type="text" id="pastIllnesses" name="pastIllnesses" defaultValue="NA" />
                 </div>
          
-                <div className="mb-3">
+                <div className="mb-3 text-center">
                     <Button variant="primary" type="submit" disabled={false}>
                         Confirm
                     </Button>

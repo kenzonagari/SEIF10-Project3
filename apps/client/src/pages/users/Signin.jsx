@@ -59,27 +59,27 @@ export default function Signin () {
     }
 
     const warningPopup = 
-        <div id="passwordHelpBlock" className="form-text ">
+        <div id="passwordHelpBlock" className="form-text text-danger">
             {   error === warningText.emailNotFound ? error :
                 error === warningText.incorrectPassword ? error : ""
             }
         </div>;
 
     return(
-        <div className="card m-4 p-4" style={{ width: "30rem" }}>
+        <div className="card m-4 p-4 mx-auto" style={{ width: "30rem" }}>
 
-            <div className="mb-3">
+            <div className="mb-3 text-center">
                 <h1>Sign In</h1>
             </div>
 
             <Form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <Form.Label>Email Address or Username</Form.Label>
+                    <Form.Label>Email Address or Username*</Form.Label>
                     <Form.Control type="text" id="email" name="email" placeholder="Enter email address or username" required/>
                 </div>
 
                 <div className="mb-3">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>Password*</Form.Label>
                     <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
                 </div>
 
@@ -88,13 +88,13 @@ export default function Signin () {
                     {error === warningText.incorrectPassword ? warningPopup : ""}
                 </div>
 
-                <div className="mb-3">
+                <div className="mb-3 text-center">
                     <Button variant="primary" type="submit" disabled={disableButton}>
                         Sign In
                     </Button>
                 </div>
             </Form>
-            <p>Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
+            <p className="mb-3 text-center">Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
         </div>
     )
 }
