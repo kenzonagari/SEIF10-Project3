@@ -83,11 +83,11 @@ export default function UserProfile ({userProfileInfo}) {
                 <div className="bg-secondary p-3 rounded-2" style={{"--bs-bg-opacity": .1}}>
                     <Form onSubmit={handleSubmit}>
                         <div className="mb-3">
-                            <Form.Label htmlFor="email" className="mb-1">Email address:</Form.Label>
+                            <Form.Label htmlFor="email" className="mb-1"><b>Email Address:</b></Form.Label>
                             <Form.Control type="email" className={`form-control ${!submit ? "" : "form-control-plaintext"}`} id="email" name="email" defaultValue={defaultData.email ? defaultData.email : userProfileInfo?.loginInfo?.email} required={true}/>
                         </div>
                         <div className="mb-3">
-                            <Form.Label htmlFor="mobile" className="mb-1">Mobile No:</Form.Label>
+                            <Form.Label htmlFor="mobile" className="mb-1"><b>Mobile No:</b></Form.Label>
                             <Form.Control type="text" className={`form-control ${!submit ? "" : "form-control-plaintext"}`} id="mobile" name="mobile" defaultValue={defaultData.mobile ? defaultData.mobile : userProfileInfo?.mobile} required={true}/>
                         </div>
                         <div className="mb-3 d-flex flex-wrap justify-content-start">
