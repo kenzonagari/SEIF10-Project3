@@ -30,33 +30,41 @@ router.use(session({
     store: store
 }));
 
-const isAuth = (req, res, next) => {
-    if(req.session.isAuth){
-        next();
-    } else {
-        res.status(401).json({msg: "Account is not authenticated"});
-    }
-};
+const isAuth = require("../middlewares/isAuth");
+const isAuthAdmin = require("../middlewares/isAuthAdmin");
 
 //* SEED
 router.get("/seed", async(req, res) => {
-    await UserLogin.deleteMany({});
+   // await UserLogin.deleteMany({});
     const userlogin = await UserLogin.insertMany([
         {
-            username: "jiayi",
+            username: "jiayi3",
             firstname: "lee",
             lastname: "lee",
-            email: "jiayi@gmail.com",
+            email: "jiayi3@gmail.com",
             password: bcrypt.hashSync("123", saltRounds),
-            confirmpassword: password,
             role: "user"
     }]);
     res.json(userlogin)
 })
 
+//* testing
+router.get("/test", async(req, res) => {
+    // await UserLogin.deleteMany({});
+     const userlogin = await UserLogin.insertMany([
+         {
+             username: "jiayi4",
+             firstname: "le",
+             lastname: "le4",
+             email: "jiayi4@gmail.com",
+             password: bcrypt.hashSync("123", saltRounds),
+             role: "user"
+     }]);
+     res.json(userlogin)
+ })
 // ROUTES
 // CREATE
-//* sign-up
+//sign-up
 router.post('/', async(req, res) => {
     const {firstname, lastname, username, email, password} = req.body;
 
@@ -96,7 +104,7 @@ router.post('/', async(req, res) => {
     };
 });
 
-// sign-in
+// user sign-in
 router.post('/signin', async(req, res) => {
     const { email, password } = req.body;
     try {
@@ -121,6 +129,23 @@ router.post('/signin', async(req, res) => {
     }
 });
 
+// admin sign-in
+router.post('/admin/signin', async(req, res) => {
+    const { email, password} = req.body
+    try {
+        const user = await UserLogin.findOne({email});
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!user || !isMatch) {
+            res.status(401).json("Email/Password not found/match!")
+        }
+        req.session.isAuthAdmin = true
+        console.log(req.session.cookie)
+         res.status(200).json("Admin sign in successfully!")
+    } catch (error) {
+        res.status(500).json({msg: error});
+    }
+   
+})
 // READ
 router.get('/', isAuth, async(req, res) => {
     
