@@ -20,15 +20,14 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/createProfile" element={<CreateProfile />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/healthProfile" element={<HealthProfile />} />
-          <Route path="/bookAppointment" element={<BookAppointment />} />
+          <Route path="/home" element={<Home page="userProfile" />} />
+          <Route path="/healthProfile" element={<Home page="healthProfile" />} />
+          <Route path="/bookAppointment" element={<Home page="bookAppointment" />} />
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/userAppointment" element={<UserAppointment />} />
           <Route path="/admin/userApptUpdate" element={<UserApptUpdate />} />

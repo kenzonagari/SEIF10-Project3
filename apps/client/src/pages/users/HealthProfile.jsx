@@ -8,8 +8,6 @@ export default function HealthProfile () {
         <>
         <div className="body">
 
-            <NavigationBar />
-
             <div className="user-profile">
                 <h1>Health Profile</h1>
                 <h2>Medications</h2>

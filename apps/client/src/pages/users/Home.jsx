@@ -1,42 +1,36 @@
-import NavigationBar from "./Navbar"
-import { useState } from "react"
-import '../body.css'
+import Header from "../Header";
+import NavigationBar from "./Navbar";
+import UserProfile from "./UserProfile";
+import HealthProfile from "./HealthProfile";
+import BookAppointment from "./BookAppointment";
+import { useState, useEffect } from "react";
 
-export default function Home () {
-    const [toggle, setToggle] = useState(true);
-    const [submit, setSubmit] = useState(false);
+export default function Home ({page}) {
 
-    const handleToggle = () => {
-        if(!submit){
-            setToggle(false);
-            setSubmit(true);
-        } else {
-            setToggle(true);
-            setSubmit(false);
-        }
-    }
+    const [userProfileInfo, setUserProfileInfo] = useState({});
+
+    useEffect(() => {   
+        fetch('/api/userprofile/')
+            .then((response) => response.json())
+            .then((data) => {
+                data[0].dateOfBirth = data[0].dateOfBirth.slice(0,10);
+                setUserProfileInfo(data[0]);
+            });
+    }, []);
+
+    const userProfile = <UserProfile userProfileInfo={userProfileInfo}/>;
+    const healthProfile = <HealthProfile />;
+    const bookAppointment = <BookAppointment />;
 
     return (
         <>
-        <div className="body">
-
-            <NavigationBar />
-
-            <div className="user-profile">
-                <h1>Home</h1>
-                <p>First Name: </p>
-                <p>Last Name: </p>
-                <p>NRIC/FIN: </p>
-                <p>Date of Birth: </p>
-                <p>Sex: </p>
-                <p>Medication Allergies: </p>
-                <p>Past Illnesses: </p>
-                <label htmlFor="email">Email address:</label>
-                <input type="email" className="form-control" id="email" defaultValue="Email Address" readOnly={toggle}/>
-                <input type="text" className="form-control" id="mobile" defaultValue="12345678" readOnly={toggle}/>
-                <button type="submit" className="btn btn-primary" onClick={handleToggle}>{submit? "Submit" : "Update"}</button>
-            </div>
-
+        <Header userProfileInfo={userProfileInfo}/>
+        <div className="body min-vh-100">
+            <NavigationBar page={page}/>
+            {   page === "userProfile"? userProfile : 
+                page === "healthProfile"? healthProfile :
+                page === "bookAppointment"? bookAppointment : ""
+            }
         </div>
         </>
     )
