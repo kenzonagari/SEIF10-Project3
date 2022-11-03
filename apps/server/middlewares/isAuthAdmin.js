@@ -3,12 +3,12 @@
 const isAuthAdmin = (req, res, next) => {
     try {
        if (req.session.isAuthAdmin){
-           next()
+           next();
        } else {
-           res.json("Not Authorized!")
+           res.json("Not Authorized!");
        }
     } catch (error) {
-       res.status(500).json({msg: error})
+       res.status(500).json({msg: error});
     }  
        
    }

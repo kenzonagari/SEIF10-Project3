@@ -1,4 +1,3 @@
-
 //* DEPENDENCIES
 const express = require("express");
 const router = express.Router();
@@ -7,6 +6,7 @@ const UserLogin = require('./UserLogin.js');
 const session = require("express-session")
 const isAuth = require("../middlewares/isAuth.js");
 const isAuthAdmin = require("../middlewares/isAuthAdmin.js");
+
 //* SEED
 router.get("/seed", async(req, res) => {
    // await UserProfile.deleteMany({});

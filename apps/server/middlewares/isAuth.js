@@ -1,4 +1,3 @@
-
 // user do something -> auth middleware (is user authorized) -> next
 // MIDDLEWARE
 const isAuth = (req, res, next) => {

@@ -14,21 +14,24 @@ const express = require("express");
 const router = express.Router();
 const UserLogin = require("../models/UserLogin");
 const session = require("express-session");
-// const MongodbSession = require("connect-mongodb-session")(session);
+const MongodbSession = require("connect-mongodb-session")(session);
 
 //* MIDDLEWARE
 
-// const store = new MongodbSession({
-//     uri: MONGO_URI,
-//     collection: "mySessions"
-// });
+const store = new MongodbSession({
+    uri: MONGO_URI,
+    collection: "mySessions"
+});
 
 router.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    // store: store
+    store: store
 }));
+
+const isAuth = require("../middlewares/isAuth");
+const isAuthAdmin = require("../middlewares/isAuthAdmin");
 
 //* SEED
 router.get("/seed", async(req, res) => {
@@ -61,9 +64,9 @@ router.get("/test", async(req, res) => {
  })
 // ROUTES
 // CREATE
-// user sign-up
+//sign-up
 router.post('/', async(req, res) => {
-    const {firstname, lastname, username, email, password} = req.body
+    const {firstname, lastname, username, email, password} = req.body;
 
     //conditionals - input check
     const existingUsername = await UserLogin.findOne({username});
@@ -95,7 +98,7 @@ router.post('/', async(req, res) => {
             email,
             password: hashedPassword
         });
-        res.status(200).json({msg: "login successful"});
+        res.status(200).json({msg: "Sign up successful"});
     } catch (error) {
         res.status(500).json({msg: error});
     };
@@ -103,21 +106,28 @@ router.post('/', async(req, res) => {
 
 // user sign-in
 router.post('/signin', async(req, res) => {
-    const { email, password} = req.body
+    const { email, password } = req.body;
     try {
-        const user = await UserLogin.findOne({email});
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!user || !isMatch) {
-            res.status(401).json("Email/Password not found/match!")
+        let user = await UserLogin.findOne({"email": email});
+        if (!user) {
+            user = await UserLogin.findOne({"username": email});
+            if(!user){
+                return res.status(401).json({msg: "Email not found"});
+            }
         }
-        req.session.isAuth = true
-        console.log(req.session.cookie)
-         res.status(200).json("Sign in successfully!")
+
+        const passwordMatch = bcrypt.compareSync(password, user.password);
+        if (passwordMatch === false) {
+            return res.status(401).json({msg: "Incorrect password"});
+        }
+        
+        req.session.isAuth = true;
+        console.log(req.session.cookie);
+        return res.status(200).json({msg: "Sign in successful", user: user});
     } catch (error) {
-        res.status(500).json({msg: error});
+        return res.status(500).json({msg: error});
     }
-   
-})
+});
 
 // admin sign-in
 router.post('/admin/signin', async(req, res) => {
@@ -137,15 +147,15 @@ router.post('/admin/signin', async(req, res) => {
    
 })
 // READ
-router.get('/', async(req, res) => {
+router.get('/', isAuth, async(req, res) => {
     
     try {
-        const users = await UserLogin.find().exec()
-        res.status(200).json(users)
+        const users = await UserLogin.find().exec();
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
-    })
+})
 
     
 
