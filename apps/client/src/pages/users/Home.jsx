@@ -7,14 +7,24 @@ import { useState, useEffect } from "react";
 
 export default function Home ({page}) {
 
-    const userProfile = <UserProfile />;
+    const [userProfileInfo, setUserProfileInfo] = useState({});
+
+    useEffect(() => {   
+        fetch('/api/userprofile/')
+            .then((response) => response.json())
+            .then((data) => {
+                data[0].dateOfBirth = data[0].dateOfBirth.slice(0,10);
+                setUserProfileInfo(data[0]);
+            });
+    }, []);
+
+    const userProfile = <UserProfile userProfileInfo={userProfileInfo}/>;
     const healthProfile = <HealthProfile />;
     const bookAppointment = <BookAppointment />;
 
-
     return (
         <>
-        <Header />
+        <Header userProfileInfo={userProfileInfo}/>
         <div className="body min-vh-100">
             <NavigationBar page={page}/>
             {   page === "userProfile"? userProfile : 

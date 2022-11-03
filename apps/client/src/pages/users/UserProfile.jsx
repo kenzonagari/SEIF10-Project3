@@ -1,54 +1,101 @@
 import { useState, useEffect } from "react"
+import { Form, Button } from 'react-bootstrap';
 
-export default function UserProfile () {
-    const [toggle, setToggle] = useState(true);
-    const [submit, setSubmit] = useState(false);
-    const [userProfileInfo, setUserProfileInfo] = useState({});
-
-    useEffect(() => {   
-        fetch('/api/userprofile/')
-            .then((response) => response.json())
-            .then((data) => {
-                data[0].dateOfBirth = data[0].dateOfBirth.slice(0,10);
-                setUserProfileInfo(data[0]);
-            });
-    }, []);
+export default function UserProfile ({userProfileInfo}) {
+    const [submit, setSubmit] = useState(true);
+    const [defaultData, setDefaultData] = useState({email: userProfileInfo?.loginInfo?.email, mobile: userProfileInfo?.loginInfo?.mobile});
 
     const handleToggle = () => {
         if(!submit){
-            setToggle(false);
             setSubmit(true);
         } else {
-            setToggle(true);
             setSubmit(false);
         }
     }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setSubmit(true);
+
+        let myFormData = new FormData(event.target);
+        let userProfileObj = Object.fromEntries(myFormData.entries());
+
+        //PUT
+        if(userProfileObj.email && userProfileObj.mobile){
+            fetch(`/api/userprofile/${userProfileInfo._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userProfileObj),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                setDefaultData({email: userProfileObj.email, mobile: userProfileObj.mobile});
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+        
+    }
+
+    const updateBtn = <Button type="reset" className="btn btn-secondary" onClick={handleToggle}>{submit ? "Update" : "Cancel"}</Button>;
+    const submitBtn = <Button variant="primary" type="submit" className="btn btn-primary mx-4">Submit</Button>;
 
     return (
 
         <div className="card m-4 p-3" style={{ "width": "50rem", "height": "fit-content" }}>
             
             <div className="card-body">
+
                 <h2 className="card-title mb-4">Home</h2>
-                <p className="mb-3">Name: {`${userProfileInfo?.loginInfo?.firstname} ${userProfileInfo?.loginInfo?.lastname}`}</p>
-                <p className="mb-3">NRIC/FIN: {userProfileInfo?.ic}</p>
-                <p className="mb-3">Date of Birth: {userProfileInfo?.dateOfBirth}</p>
-                <p className="mb-3">Sex: {userProfileInfo?.sex}</p>
-                <p className="mb-3">Medication Allergies: {userProfileInfo?.medAllergies}</p>
-                <p className="mb-3">Past Illnesses: {userProfileInfo?.pastIllnesses}</p>
+
+                <table className="table table-borderless w-50">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>{userProfileInfo?.loginInfo?.firstname} {userProfileInfo?.loginInfo?.lastname}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">NRIC/FIN</th>
+                            <td>{userProfileInfo?.ic}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Date of Birth</th>
+                            <td>{userProfileInfo?.dateOfBirth}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Sex</th>
+                            <td>{userProfileInfo?.sex}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Medication Allergies</th>
+                            <td>{userProfileInfo?.medAllergies}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Past Illnesses</th>
+                            <td>{userProfileInfo?.pastIllnesses}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div className="bg-secondary p-3 rounded-2" style={{"--bs-bg-opacity": .1}}>
-                    <div className="mb-3">
-                        <label htmlFor="email" className="mb-1">Email address:</label>
-                        <input type="email" className={`form-control ${submit ? "" : "text-muted"}`} id="email" defaultValue={userProfileInfo?.loginInfo?.email} readOnly={toggle}/>
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="mobile" className="mb-1">Mobile No:</label>
-                        <input type="text" className={`form-control ${submit ? "" : "text-muted"}`} id="mobile" defaultValue={userProfileInfo?.mobile} readOnly={toggle}/>
-                    </div>
-                    <div className="mb-3">
-                        <button type="submit" className={`btn ${submit ? "btn-primary": "btn-secondary"}`} onClick={handleToggle}>{submit? "Submit" : "Update"}</button>
-                    </div>
+                    <Form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <Form.Label htmlFor="email" className="mb-1">Email address:</Form.Label>
+                            <Form.Control type="email" className={`form-control ${!submit ? "" : "form-control-plaintext"}`} id="email" name="email" defaultValue={defaultData.email ? defaultData.email : userProfileInfo?.loginInfo?.email} required={true}/>
+                        </div>
+                        <div className="mb-3">
+                            <Form.Label htmlFor="mobile" className="mb-1">Mobile No:</Form.Label>
+                            <Form.Control type="text" className={`form-control ${!submit ? "" : "form-control-plaintext"}`} id="mobile" name="mobile" defaultValue={defaultData.mobile ? defaultData.mobile : userProfileInfo?.mobile} required={true}/>
+                        </div>
+                        <div className="mb-3 d-flex flex-wrap justify-content-start">
+                            {updateBtn}
+                            {!submit ? submitBtn : ""}
+                        </div>
+                    </Form>
+
                 </div>
 
             </div>
