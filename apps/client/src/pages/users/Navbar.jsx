@@ -1,7 +1,7 @@
 import { Navbar } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
-export default function NavigationBar () {
+export default function NavigationBar ({page}) {
     const navigate = useNavigate();
 
     return (
@@ -10,13 +10,13 @@ export default function NavigationBar () {
             <Navbar>
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item">
-                        <a className="nav-link" href="/home">Home</a>
+                        <a className={`nav-link ${page === "userProfile" ? "active" : "link-dark"}`} href="/home">Home</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link link-dark" href="/healthProfile">Health Profile</a>
+                        <a className={`nav-link ${page === "healthProfile" ? "active" : "link-dark"}`} href="/healthProfile">Health Profile</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link link-dark" href="/bookAppointment">Book An Appointment</a>
+                        <a className={`nav-link ${page === "bookAppointment" ? "active" : "link-dark"}`} href="/bookAppointment">Book An Appointment</a>
                     </li>
                 </ul>
             </Navbar>

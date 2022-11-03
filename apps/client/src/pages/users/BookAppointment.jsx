@@ -5,7 +5,6 @@ export default function BookAppointment () {
     return(
         <>
         <div className="body">
-            <NavigationBar />
 
             <div className="user-profile">
                 <h1>Book An Appointment</h1>
