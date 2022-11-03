@@ -5,7 +5,7 @@ const ApptSummary = require("../models/ApptSummary.js");
 
 //* SEED
 router.get("/seed", async(req, res)=> {
-    await ApptSummary.deleteMany({})
+   // await ApptSummary.deleteMany({})
     const apptsummary = await ApptSummary.insertMany([{
         loginInfo: "6358d9e079d6f26ab0fb7bd6",
     date: "1990/12/05",

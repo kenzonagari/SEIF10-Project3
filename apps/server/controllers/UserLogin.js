@@ -35,17 +35,30 @@ router.get("/seed", async(req, res) => {
    // await UserLogin.deleteMany({});
     const userlogin = await UserLogin.insertMany([
         {
-            username: "jiayi",
+            username: "jiayi3",
             firstname: "lee",
             lastname: "lee",
-            email: "jiayi@gmail.com",
+            email: "jiayi3@gmail.com",
             password: bcrypt.hashSync("123", saltRounds),
-            confirmpassword: password,
             role: "user"
     }]);
     res.json(userlogin)
 })
 
+//* testing
+router.get("/test", async(req, res) => {
+    // await UserLogin.deleteMany({});
+     const userlogin = await UserLogin.insertMany([
+         {
+             username: "jiayi4",
+             firstname: "le",
+             lastname: "le4",
+             email: "jiayi4@gmail.com",
+             password: bcrypt.hashSync("123", saltRounds),
+             role: "user"
+     }]);
+     res.json(userlogin)
+ })
 // ROUTES
 // CREATE
 // user sign-up
