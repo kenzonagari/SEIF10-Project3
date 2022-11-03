@@ -45,9 +45,13 @@ export default function Signin () {
                     if(data.msg === "Incorrect password"){
                         setError(warningText.incorrectPassword);
                     } else 
-                    if(data.msg === "Sign in successful"){
+                    if(data.msg === "Redirecting to /home"){
                         setError("");
-                        return;
+                        return navigate("/home");
+                    } else
+                    if(data.msg === "Redirecting to /createProfile"){
+                        setError("");
+                        return navigate("/createProfile");
                     }
                     setDisableButton(false);
                     return;

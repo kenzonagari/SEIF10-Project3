@@ -1,11 +1,28 @@
+//* Mongoose dependencies
+const mongoose = require("mongoose");
+const MONGO_URI = process.env.MONGO_URI;
+
 //* DEPENDENCIES
 const express = require("express");
 const router = express.Router();
 const UserProfile = require("../models/UserProfile.js");
 const UserLogin = require('./UserLogin.js'); 
-const session = require("express-session")
+const session = require("express-session");
+const MongodbSession = require("connect-mongodb-session")(session);
 const isAuth = require("../middlewares/isAuth.js");
 const isAuthAdmin = require("../middlewares/isAuthAdmin.js");
+
+const store = new MongodbSession({
+    uri: MONGO_URI,
+    collection: "mySessions"
+});
+
+router.use(session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    store: store
+}));
 
 //* SEED
 router.get("/seed", async(req, res) => {
@@ -38,14 +55,16 @@ router.get("/test", async(req, res) => {
 // ROUTES
 // CREATE
 // user create profile
-router.post('/', isAuth, async(req, res)=> {
+router.post('/', async(req, res)=> {
+    req.body.loginInfo = req.session.user._id;
+    console.log(req.body);
     try {
-        const createprofile = await UserProfile.create(req.body)
-        res.status(200).json(createprofile)
+        const createUserProfile = await UserProfile.create(req.body);
+        res.status(200).json({msg: "Redirecting to /home"});
     } catch (error) {
-        res.status(500).json({msg: "Server Error"})
+        res.status(500).json({msg: "server error"});
     }
-})
+});
 
 // router.post('/logout', (req, res)=> {
 //     req.session.destroy((err)=> {

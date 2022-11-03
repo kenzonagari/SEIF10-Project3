@@ -59,8 +59,7 @@ export default function Signup () {
                     } else 
                     if(data.msg === "Sign up successful"){
                         setError("");
-                        navigate("/createprofile");
-                        return;
+                        return navigate("/signin");
                     }
                     setDisableButton(false);
                     return;
