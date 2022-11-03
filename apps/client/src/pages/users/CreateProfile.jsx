@@ -149,7 +149,7 @@ export default function CreateProfile () {
                         </div>
                         <div className="col">
                             <select className="form-select mb-3" id="year" name="year" required>
-                                <option value="">YY</option>
+                                <option value="">YYYY</option>
                                 {yearOption}
                             </select>
                         </div>

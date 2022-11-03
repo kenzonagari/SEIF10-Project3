@@ -14,9 +14,9 @@ export default function HeaderFunction ({userProfileInfo}) {
                     HealthcarePal
                 </h1>
             </a>
-            <a className="navbar-brand h1 mx-4 my-0 d-flex flex-direction-row align-items-center" href="#">
+            <a className="navbar-brand h1 mx-4 my-0 d-flex flex-row align-items-center" href="#">
                 <h5>{userProfileInfo?.loginInfo?.username}</h5>
-                <div className="rounded-circle text-white fs-5 mx-2 text-center" style={{"width": "50px", "height": "50px", "lineHeight":"45px", "background":"#d63384"}}>
+                <div className="rounded-circle text-white fs-6 mx-2 text-center" style={{"width": "40px", "height": "40px", "lineHeight":"37.5px", "background":"#d63384"}}>
                    {initial}
                 </div>
             </a>

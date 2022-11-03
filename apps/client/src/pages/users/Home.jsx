@@ -25,7 +25,7 @@ export default function Home ({page}) {
     return (
         <>
         <Header userProfileInfo={userProfileInfo}/>
-        <div className="body min-vh-100">
+        <div className="body min-vh-100 d-flex flex-row">
             <NavigationBar page={page}/>
             {   page === "userProfile"? userProfile : 
                 page === "healthProfile"? healthProfile :

@@ -1,4 +1,3 @@
-import NavigationBar from "./Navbar"
 import { Table } from 'react-bootstrap'
 import { useState } from "react"
 
