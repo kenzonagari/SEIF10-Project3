@@ -19,7 +19,7 @@ export default function Home ({page}) {
     }, []);
 
     const userProfile = <UserProfile userProfileInfo={userProfileInfo}/>;
-    const healthProfile = <HealthProfile />;
+    const healthProfile = <HealthProfile userProfileInfo={userProfileInfo}/>;
     const bookAppointment = <BookAppointment />;
 
     return (
