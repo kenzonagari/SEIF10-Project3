@@ -2,7 +2,7 @@ export default function Footer () {
     return (
         <>
         <div className="container">
-            <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top mb-0">
                 <p className="col-md-4 mb-0 text-muted">HealthcarePal 2022</p>
 
                 <ul className="d-flex flex-wrap nav col-md-4 justify-content-end">

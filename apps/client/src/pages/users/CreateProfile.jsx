@@ -1,32 +1,69 @@
 import { Form, Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateProfile () {
     const [error, setError] = useState("");
+    const [userLoginInfo, setUserLoginInfo] = useState({});
+    const [disableButton, setDisableButton] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {   
+        fetch('/api/userlogin/')
+            .then((response) => response.json())
+            .then((data) => {
+                setUserLoginInfo(data[0]);
+            });
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
         let myFormData = new FormData(event.target);
-        let userLoginObj = Object.fromEntries(myFormData.entries());
-        let loginIsValid = false;
+        let userProfileObj = Object.fromEntries(myFormData.entries());
+
+        setDisableButton(true);
 
         //conditionals
 
-        if(userLoginObj.medAllergies === ""){
-            userLoginObj.medAllergies = "NA";
+        if(userProfileObj.medAllergies === ""){
+            userProfileObj.medAllergies = "NA";
         }
 
-        if(userLoginObj.pastIllnesses === ""){
-            userLoginObj.pastIllnesses = "NA";
+        if(userProfileObj.pastIllnesses === ""){
+            userProfileObj.pastIllnesses = "NA";
         }
 
+        if(userProfileObj.sex === ""){
+            userProfileObj.sex = "Not specified";
+        }
 
+        //refactor DOB
+        userProfileObj.dateOfBirth = `${userProfileObj.year}` + '-' + `${userProfileObj.month}` + '-' + `${userProfileObj.date}`;
+        delete userProfileObj.date;
+        delete userProfileObj.month;
+        delete userProfileObj.year;
 
-        console.log(userLoginObj);
-        loginIsValid = true;
+        //POST
+        fetch('/api/userprofile', {   method: "POST", 
+                                    headers: {
+                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                    },
+                                    body: JSON.stringify(userProfileObj) 
+                                })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if(data.msg === "Redirecting to /home"){
+                    setError("");
+                    return navigate("/home");
+                } else {
+                    setError("Server error");
+                    setDisableButton(false);
+                    return;
+                }
+            });
     }
 
     const dateOption = [];
@@ -35,18 +72,18 @@ export default function CreateProfile () {
 
     for(let i = 1; i <= 31 ; i++){
         dateOption.push(
-            <option value={`${i}`}>{`${i}`}</option>
+            <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
         );
         if(i <= 12){
             monthOption.push(
-                <option value={`${i}`}>{`${i}`}</option>
+                <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
             );
         }
     }
 
     for(let i = 2022; i > 1900 ; i--){
         yearOption.push(
-            <option value={`${i}`}>{`${i}`}</option>
+            <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
         );
     }
 
@@ -64,13 +101,13 @@ export default function CreateProfile () {
                         <div className="col">
                             <div className="mb-3">
                                 <Form.Label>Username</Form.Label>
-                                <Form.Control type="text" id="username" placeholder="prefilled username" />
+                                <Form.Control type="text" id="username" placeholder={`${userLoginInfo?.username ? userLoginInfo.username : "username"}`} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="mb-3">
                                 <Form.Label>Email address</Form.Label>
-                                <Form.Control type="email" id="email" placeholder="prefilled email" />
+                                <Form.Control type="email" id="email" placeholder={`${userLoginInfo?.email ? userLoginInfo.email : "email"}`} />
                             </div>
                         </div>
                     </div>
@@ -78,13 +115,13 @@ export default function CreateProfile () {
                         <div className="col">
                             <div className="mb-3">
                                 <Form.Label>First Name</Form.Label>
-                                <Form.Control type="text" id="firstName" placeholder="prefilled first name" />
+                                <Form.Control type="text" id="firstName" placeholder={`${userLoginInfo?.firstname ? userLoginInfo.firstname : "first name"}`} />
                             </div>
                         </div>
                         <div className="col">
                             <div className="mb-3">
                                 <Form.Label>Last Name</Form.Label>
-                                <Form.Control type="text" id="lastName" placeholder="prefilled last name" />
+                                <Form.Control type="text" id="lastName" placeholder={`${userLoginInfo?.lastname ? userLoginInfo.lastname : "last name"}`} />
                             </div>
                         </div>
                     </div>
@@ -121,13 +158,13 @@ export default function CreateProfile () {
 
                 <div className='row'>
                     <div className='col'>
-                        <div className="form-group col-md-8 mb-3">
+                        <div className="form-group mb-3">
                             <label className='form-label'>Sex*</label>
                             <select className="form-select mb-3" id="sex" name="sex" required>
                                 <option value=""></option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="nonbinary">Non-Binary</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="NB">Non-Binary</option>
                             </select>
                         </div>
                     </div>
@@ -137,6 +174,12 @@ export default function CreateProfile () {
                             <Form.Control type="text" id="mobile" name="mobile" placeholder="12345678" required/>
                         </div>
                     </div>
+                    <div className='col'>
+                        <div className="mb-3 md-10">
+                        <Form.Label>NRIC/FIN*</Form.Label>
+                        <Form.Control type="text" id="ic" name="ic" placeholder="S12345678A" required/>
+                    </div>
+                </div>
                 </div>
             
                 <div className="mb-3">
@@ -150,7 +193,7 @@ export default function CreateProfile () {
                 </div>
          
                 <div className="mb-3 text-center">
-                    <Button variant="primary" type="submit" disabled={false}>
+                    <Button variant="primary" type="submit" disabled={disableButton}>
                         Confirm
                     </Button>
                 </div>

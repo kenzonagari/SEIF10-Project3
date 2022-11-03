@@ -13,6 +13,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const express = require("express");
 const router = express.Router();
 const UserLogin = require("../models/UserLogin");
+const UserProfile = require("../models/UserProfile.js");
 const session = require("express-session");
 const MongodbSession = require("connect-mongodb-session")(session);
 
@@ -60,8 +61,9 @@ router.get("/test", async(req, res) => {
              password: bcrypt.hashSync("123", saltRounds),
              role: "user"
      }]);
-     res.json(userlogin)
- })
+     res.json(userlogin);
+});
+
 // ROUTES
 // CREATE
 //sign-up
@@ -122,8 +124,20 @@ router.post('/signin', async(req, res) => {
         }
         
         req.session.isAuth = true;
-        console.log(req.session.cookie);
-        return res.status(200).json({msg: "Sign in successful", user: user});
+        req.session.user = {
+            _id: user._id,
+            username: user.username,
+            password: user.password
+        }
+
+        let checkUserProfile = await UserProfile.findOne({ "loginInfo": req.session.user._id });
+
+        if(checkUserProfile){
+            return res.status(200).json({msg: "Redirecting to /home"});
+        } else {
+            return res.status(200).json({msg: "Redirecting to /createProfile"});
+        }
+
     } catch (error) {
         return res.status(500).json({msg: error});
     }
@@ -143,21 +157,18 @@ router.post('/admin/signin', async(req, res) => {
          res.status(200).json("Admin sign in successfully!")
     } catch (error) {
         res.status(500).json({msg: error});
-    }
-   
-})
+    } 
+});
+
 // READ
 router.get('/', isAuth, async(req, res) => {
-    
     try {
-        const users = await UserLogin.find().exec();
-        res.status(200).json(users);
+        const userLoginInfo = await UserLogin.find({ "_id" : req.session.user._id }).exec();
+        res.status(200).json(userLoginInfo);
     } catch (error) {
         res.status(500).json({msg: error});
     }
-})
-
-    
+});
 
 // Update
 router.put('/:id', async(req, res)=> {
@@ -165,7 +176,7 @@ router.put('/:id', async(req, res)=> {
     try {
         const updateuser = await UserLogin.findByIdAndUpdate(id);
         if (updateuser === null) {
-            res.status(400).json({msg: "Wrond ID"})
+            res.status(400).json({msg: "Wrong ID"})
         } else {
             res.status(204).json(updateuser)
         }
