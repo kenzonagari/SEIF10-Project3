@@ -7,35 +7,33 @@ const UserLogin = require('./UserLogin.js');
 const session = require("express-session")
 const isAuth = require("../middlewares/isAuth.js");
 const isAuthAdmin = require("../middlewares/isAuthAdmin.js");
-
-
 //* SEED
 router.get("/seed", async(req, res) => {
    // await UserProfile.deleteMany({});
     const userprofile = await UserProfile.insertMany([
         {
-            loginInfo: "6358d9e079d6f26ab0fb7bd6",
+        
             mobile: "95558555",
             ic: "S2345675F",
             dateOfBirth: "2022/12/20",
             sex: "F",
             medAllergies: "NA",
-            pastIllnesses: "NA"
+            pastIllnesses: "NA",
+            loginInfo: "6361f7ff07e2ef96c36a06f9"
     }]);
     res.json(userprofile)
 })
-// read all data
-router.get("/alldata", (req, res, next) => {
-    UserProfile.find()
-    .populate("loginInfo")
-    .exec()
-    .then(ele => {
-        res.status(200).json({})
-    })
-    .catch(err => {
-        res.status(500).json({msg: err})
-    })
-})
+
+//* testing
+router.get("/test", async(req, res) => {
+    try {
+        const alldata = await UserProfile.find().populate("loginInfo")
+        res.status(200).json(alldata)
+    } catch (error) {
+        res.status(500).json({ msg: error });
+      } 
+ })
+
 
 // ROUTES
 // CREATE
