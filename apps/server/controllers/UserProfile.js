@@ -55,7 +55,7 @@ router.get("/test", async(req, res) => {
 // ROUTES
 // CREATE
 // user create profile
-router.post('/', async(req, res)=> {
+router.post('/', isAuth, async(req, res)=> {
     req.body.loginInfo = req.session.user._id;
     console.log(req.body);
     try {
@@ -77,12 +77,12 @@ router.post('/', async(req, res)=> {
 // user read user profile
 router.get('/', isAuth, async(req, res) => {
     try {
-        const users = await UserProfile.find().exec()
-        res.status(200).json(users)
+        const userProfileInfo = await UserProfile.find({ "loginInfo" : req.session.user._id }).populate("loginInfo");
+        res.status(200).json(userProfileInfo);
     } catch (error) {
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
-    })
+});
 
 
 // Update

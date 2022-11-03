@@ -6,7 +6,7 @@ export default function NavigationBar () {
 
     return (
         <>
-        <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{ "width": "280px" }}>
+        <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{ "width": "12rem" }}>
             <Navbar>
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item">
