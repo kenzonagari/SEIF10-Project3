@@ -29,6 +29,27 @@ export default function CreateProfile () {
         loginIsValid = true;
     }
 
+    const dateOption = [];
+    const monthOption = [];
+    const yearOption = [];
+
+    for(let i = 1; i <= 31 ; i++){
+        dateOption.push(
+            <option value={`${i}`}>{`${i}`}</option>
+        );
+        if(i <= 12){
+            monthOption.push(
+                <option value={`${i}`}>{`${i}`}</option>
+            );
+        }
+    }
+
+    for(let i = 2022; i > 1900 ; i--){
+        yearOption.push(
+            <option value={`${i}`}>{`${i}`}</option>
+        );
+    }
+
     return(
         <div className="card m-4 p-5 mx-auto" style={{ width: "50rem" }}>
 
@@ -78,13 +99,22 @@ export default function CreateProfile () {
                     <Form.Label>Date Of Birth*</Form.Label>
                     <div className="row">
                         <div className="col">
-                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="DD" min="1" max="31" required/>
+                            <select className="form-select mb-3" id="date" name="date" required>
+                                <option value="" className="text-secondary">DD</option>
+                                {dateOption}
+                            </select>
                         </div>
                         <div className="col">
-                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="MM" min="1" max="12" required/>
+                            <select className="form-select mb-3" id="month" name="month" required>
+                                <option value="">MM</option>
+                                {monthOption}
+                            </select>
                         </div>
                         <div className="col">
-                            <Form.Control type="number" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY" min="1900" max="2022" required/>
+                            <select className="form-select mb-3" id="year" name="year" required>
+                                <option value="">YY</option>
+                                {yearOption}
+                            </select>
                         </div>
                     </div>
                 </div>

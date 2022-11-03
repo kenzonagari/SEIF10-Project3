@@ -14,21 +14,29 @@ const express = require("express");
 const router = express.Router();
 const UserLogin = require("../models/UserLogin");
 const session = require("express-session");
-// const MongodbSession = require("connect-mongodb-session")(session);
+const MongodbSession = require("connect-mongodb-session")(session);
 
 //* MIDDLEWARE
 
-// const store = new MongodbSession({
-//     uri: MONGO_URI,
-//     collection: "mySessions"
-// });
+const store = new MongodbSession({
+    uri: MONGO_URI,
+    collection: "mySessions"
+});
 
 router.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    // store: store
+    store: store
 }));
+
+const isAuth = (req, res, next) => {
+    if(req.session.isAuth){
+        next();
+    } else {
+        res.status(401).json({msg: "Account is not authenticated"});
+    }
+};
 
 //* SEED
 router.get("/seed", async(req, res) => {
@@ -48,7 +56,7 @@ router.get("/seed", async(req, res) => {
 
 // ROUTES
 // CREATE
-//sign-up
+//* sign-up
 router.post('/', async(req, res) => {
     const {firstname, lastname, username, email, password} = req.body;
 
@@ -114,15 +122,15 @@ router.post('/signin', async(req, res) => {
 });
 
 // READ
-router.get('/', async(req, res) => {
+router.get('/', isAuth, async(req, res) => {
     
     try {
-        const users = await UserLogin.find().exec()
-        res.status(200).json(users)
+        const users = await UserLogin.find().exec();
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
-    })
+})
 
     
 

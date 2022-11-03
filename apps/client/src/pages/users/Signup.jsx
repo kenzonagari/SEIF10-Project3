@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const warningText = {
-    usernameTooShort: "Username needs to have at least 3 letters!",
+    usernameTooShort: "Username must have at least 3 characters!",
     passwordMatch: "Password does not match!",
     usernameTaken: "Username already taken!",
     emailTaken: "Email already taken!"
@@ -109,7 +109,7 @@ export default function Signup () {
                     <Form.Label>Username*</Form.Label>
                     <br></br>
                     <Form.Text className="text-muted">
-                        Username must at least be 3 letters long
+                        Username must have at least 3 characters
                     </Form.Text>
                     <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
                     {error === warningText.usernameTooShort ? warningPopup : ""}
