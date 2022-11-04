@@ -8,14 +8,14 @@ router.get("/seed", async(req, res)=> {
    // await ApptSummary.deleteMany({})
     const apptsummary = await ApptSummary.insertMany([{
         loginInfo: "6358d9e079d6f26ab0fb7bd6",
-    date: "1990/12/05",
-    time: "10.00",
-    purpose: "General Check-Up",
-    summary: "Vaccination",
-    prescriptionInfo: "NA",
-    billingInfo: 50
-    }])
-    res.json(apptsummary)
+        date: "1990/12/05",
+        time: "10.00",
+        purpose: "General Check-Up",
+        summary: "Vaccination",
+        prescriptionInfo: "NA",
+        billingInfo: 50
+    }]);
+    res.json(apptsummary);
 })
 
 // ROUTES

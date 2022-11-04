@@ -102,8 +102,6 @@ export default function Signup () {
                     </div>
                 </div>
 
-
-
                 <div className="mb-3 col">
                     <Form.Label>Username*</Form.Label>
                     <br></br>
