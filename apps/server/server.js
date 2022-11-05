@@ -38,6 +38,10 @@ app.use('/api/medprescription', MedPrescription);
 // UPDATE
 // DELETE
 
+app.get("/*", (req, res) => {
+    res.sendFile(path.resolve("../client/dist/index.html"));
+});
+
 
 //---------------------
 //* Connect to Mongo
