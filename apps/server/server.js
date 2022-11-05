@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require ("cors");
 const app = express();
+const path = require("path");
 
 //* dotenv
 require("dotenv").config();
@@ -39,10 +40,12 @@ app.use('/api/medprescription', MedPrescription);
 // UPDATE
 // DELETE
 
+
 // for react router to work
 app.get("/*", (req, res) => {
     res.sendFile(path.resolve("../client/dist/index.html"));
   });
+
 //---------------------
 //* Connect to Mongo
 mongoose.connect(MONGO_URI, () => {
