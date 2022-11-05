@@ -77,8 +77,7 @@ router.get("/test", async(req, res) => {
      }]);
      res.json(userlogin)
  })
-     res.json(userlogin);
-});
+ 
 
 // ROUTES
 // CREATE
