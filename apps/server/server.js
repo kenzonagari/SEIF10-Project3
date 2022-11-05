@@ -20,6 +20,7 @@ const saltRounds = 10;
 
 
 //* MIDDLEWARE
+app.use(express.static("../client/dist"))
 app.use(cors());
 app.use(express.json()); //this is how Express interprets body from client side
 app.use(express.static("../client/dist"));
@@ -39,10 +40,11 @@ app.use('/api/medprescription', MedPrescription);
 // UPDATE
 // DELETE
 
+
+// for react router to work
 app.get("/*", (req, res) => {
     res.sendFile(path.resolve("../client/dist/index.html"));
-});
-
+  });
 
 //---------------------
 //* Connect to Mongo

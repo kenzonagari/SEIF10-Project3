@@ -61,8 +61,23 @@ router.get("/test", async(req, res) => {
              password: bcrypt.hashSync("123", saltRounds),
              role: "user"
      }]);
-     res.json(userlogin);
-});
+     res.json(userlogin)
+ })
+
+ router.get("/test2", async(req, res) => {
+    // await UserLogin.deleteMany({});
+     const userlogin = await UserLogin.insertMany([
+         {
+             username: "jiayi6",
+             firstname: "le",
+             lastname: "le6",
+             email: "jiayi6@gmail.com",
+             password: bcrypt.hashSync("123", saltRounds),
+             role: "user",
+     }]);
+     res.json(userlogin)
+ })
+ 
 
 // ROUTES
 // CREATE
