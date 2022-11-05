@@ -2,7 +2,6 @@ import NavigationBar from "./Navbar"
 import { Card, Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 
-import '../body.css'
 import CreateProfile from "../users/CreateProfile";
 
 export default function UserProfileUpdate () {

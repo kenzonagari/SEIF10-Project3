@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function CreateProfile () {
-    const [error, setError] = useState("");
-    const [userLoginInfo, setUserLoginInfo] = useState({});
-    const [disableButton, setDisableButton] = useState(false);
     const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const [disableButton, setDisableButton] = useState(false);
+    const [userLoginInfo, setUserLoginInfo] = useState({});
 
     useEffect(() => {   
         fetch('/api/userlogin/')
@@ -19,10 +19,11 @@ export default function CreateProfile () {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setDisableButton(true);
+        
         let myFormData = new FormData(event.target);
         let userProfileObj = Object.fromEntries(myFormData.entries());
 
-        setDisableButton(true);
 
         //conditionals
 
@@ -149,7 +150,7 @@ export default function CreateProfile () {
                         </div>
                         <div className="col">
                             <select className="form-select mb-3" id="year" name="year" required>
-                                <option value="">YY</option>
+                                <option value="">YYYY</option>
                                 {yearOption}
                             </select>
                         </div>

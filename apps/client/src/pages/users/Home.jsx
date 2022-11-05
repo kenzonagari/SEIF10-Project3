@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "./Header";
 import NavigationBar from "./Navbar";
 import UserProfile from "./UserProfile";
 import HealthProfile from "./HealthProfile";
@@ -19,13 +19,13 @@ export default function Home ({page}) {
     }, []);
 
     const userProfile = <UserProfile userProfileInfo={userProfileInfo}/>;
-    const healthProfile = <HealthProfile />;
+    const healthProfile = <HealthProfile userProfileInfo={userProfileInfo}/>;
     const bookAppointment = <BookAppointment />;
 
     return (
         <>
         <Header userProfileInfo={userProfileInfo}/>
-        <div className="body min-vh-100">
+        <div className="body min-vh-100 d-flex flex-row">
             <NavigationBar page={page}/>
             {   page === "userProfile"? userProfile : 
                 page === "healthProfile"? healthProfile :

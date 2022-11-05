@@ -9,6 +9,7 @@ const UserProfileSchema = mongoose.Schema({
     medAllergies: {type: String, required: true},
     pastIllnesses: {type: String, required: true},
     loginInfo: {type: mongoose.Schema.Types.ObjectId, ref: "UserLogin", unique: true},
+    apptSummary: [{type: mongoose.Schema.Types.ObjectId, ref: "ApptSummary"}]
 })
 
 module.exports = mongoose.model("UserProfile", UserProfileSchema)
