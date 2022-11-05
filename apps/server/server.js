@@ -39,7 +39,10 @@ app.use('/api/medprescription', MedPrescription);
 // UPDATE
 // DELETE
 
-
+// for react router to work
+app.get("/*", (req, res) => {
+    res.sendFile(path.resolve("../client/dist/index.html"));
+  });
 //---------------------
 //* Connect to Mongo
 mongoose.connect(MONGO_URI, () => {

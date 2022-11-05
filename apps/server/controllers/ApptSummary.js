@@ -88,9 +88,9 @@ router.post('/', isAuth, async(req, res)=> {
 // check is the date available if yes -> can book, if no -> another date
 router.get("/checkdate", async(req, res) => {
     try {
-        const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
-      
-        res.status(200).json(alldata)
+        const checkdate = await ApptSummary.find({}, {date:1, time:1})
+      console.log(checkdate)
+        res.status(200).json(checkdate)
     } catch (error) {
         res.status(500).json({ msg: error });
       } 
