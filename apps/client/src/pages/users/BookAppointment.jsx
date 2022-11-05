@@ -22,7 +22,6 @@ export default function BookAppointment () {
         fetch('/api/apptsummary/checkdate')
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
             setUnavailableDate(data);
         });
     }, [])
@@ -112,23 +111,32 @@ export default function BookAppointment () {
         let mins = parseInt(element.time.slice(3,5));
 
         if(mins + 30 === 30){
-            hour = hour.toString();
+            if(hour < 10){
+                hour = '0' + hour.toString();
+            } else {
+                hour = hour.toString();
+            }
             mins = "30";
         } else {
-            hour = (hour + 1).toString();
+            if((hour + 1) < 10){
+                hour = '0' + (hour+1).toString();
+            } else {
+                hour = (hour+1).toString();
+            }
             mins = "00";
         }
 
-        element.endTime = hour + mins; //0930 or 1000
+        element.endTime = hour + ":" + mins; //09:30 or 10:00
 
         return(
             {
                 title: 'unavailable',
                 start: `${element.date.slice(0,10)}T${element.time}`,
                 end: `${element.date.slice(0,10)}T${element.endTime}`,
-                backgroundColor: "grey",
                 borderColor: "grey",
-                display: 'background'
+                display: 'background',
+                backgroundColor: "grey",
+                textColor: "black",
             }
         )
     });
