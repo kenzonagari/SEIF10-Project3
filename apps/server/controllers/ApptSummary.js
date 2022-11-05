@@ -54,7 +54,16 @@ router.post('/', async(req, res)=> {
         res.status(500).json({msg: "Server Error"})
     }
 })
-
+// check is the date available if yes -> can book, if no -> another date
+router.get("/checkdate", async(req, res) => {
+    try {
+        const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
+      
+        res.status(200).json(alldata)
+    } catch (error) {
+        res.status(500).json({ msg: error });
+      } 
+ })
 // READ
 
 router.get('/', async (req, res)=> {

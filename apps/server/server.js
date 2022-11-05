@@ -19,6 +19,7 @@ const saltRounds = 10;
 
 
 //* MIDDLEWARE
+app.use(express.static("../client/dist"))
 app.use(cors());
 app.use(express.json()); //this is how Express interprets body from client side
 
