@@ -55,7 +55,18 @@ router.get("/test", async(req, res)=> {
      res.json(apptsummary)
  })
 
- //  /admin/:id (admin can read all)
+ // admin can read selected user's everything
+ router.get("/test2/:id", async(req, res) => {
+    try {
+        const alldata = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
+      
+        res.status(200).json(alldata)
+    } catch (error) {
+        res.status(500).json({ msg: "error" });
+      } 
+ })
+
+ //  admin can read all user's everything
  router.get("/test2", async(req, res) => {
     try {
         const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
@@ -138,6 +149,20 @@ router.put('/:id', async(req, res)=> {
             res.status(500).json({msg: error})
         }
         })
-    
+    // admin delete selected user's everything
+    router.delete('/admin/:id', async(req, res)=> {
+        const {id} = req.params
+        try {
+            const deleteuser = await ApptSummary.findByIdAndDelete(id);
+            if (updateuser === null) {
+                res.status(400).json({msg: "Wrond ID"})
+            } else {
+                res.status(204).json(deleteuser)
+            }
+        
+        } catch (error) {
+            res.status(500).json({msg: error})
+        }
+        })
     // EXPORT
 module.exports = router;

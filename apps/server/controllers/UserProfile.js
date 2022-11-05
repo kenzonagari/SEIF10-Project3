@@ -59,12 +59,13 @@ router.post('/', isAuth, async(req, res)=> {
 
 
 
-// router.post('/logout', (req, res)=> {
-//     req.session.destroy((err)=> {
-//         if(err) throw err;
-//         res.json({msg: "Logged Out!"})
-//     })
-// })
+router.post('/logout', (req, res)=> {
+    req.session.isAuth = false
+    req.session.destroy((err)=> {
+        if(err) throw err;
+        res.json({msg: "Logged Out!"})
+    })
+})
 
 // READ
 // user read user profile
