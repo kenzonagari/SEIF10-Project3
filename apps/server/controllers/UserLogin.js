@@ -14,20 +14,20 @@ const express = require("express");
 const router = express.Router();
 const UserLogin = require("../models/UserLogin");
 const session = require("express-session");
-// const MongodbSession = require("connect-mongodb-session")(session);
+const MongodbSession = require("connect-mongodb-session")(session);
 
 //* MIDDLEWARE
 
-// const store = new MongodbSession({
-//     uri: MONGO_URI,
-//     collection: "mySessions"
-// });
+const store = new MongodbSession({
+    uri: MONGO_URI,
+    collection: "mySessions"
+});
 
 router.use(session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
-    // store: store
+    store: store
 }));
 
 //* SEED
@@ -56,6 +56,20 @@ router.get("/test", async(req, res) => {
              email: "jiayi4@gmail.com",
              password: bcrypt.hashSync("123", saltRounds),
              role: "user"
+     }]);
+     res.json(userlogin)
+ })
+
+ router.get("/test2", async(req, res) => {
+    // await UserLogin.deleteMany({});
+     const userlogin = await UserLogin.insertMany([
+         {
+             username: "jiayi6",
+             firstname: "le",
+             lastname: "le6",
+             email: "jiayi6@gmail.com",
+             password: bcrypt.hashSync("123", saltRounds),
+             role: "user",
      }]);
      res.json(userlogin)
  })
