@@ -11,7 +11,7 @@ export default function HealthProfile ({userProfileInfo}) {
         fetch('/api/apptsummary/')
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
+            // console.log(data);
             setApptInfo(data);
         });
     }, []);
@@ -136,7 +136,7 @@ export default function HealthProfile ({userProfileInfo}) {
                     </Table>
                 </div>
                 <div className="card m-1 p-3" style={{ "width": "100%", "height": "fit-content" }}>
-                    <h3 className="m-3">Billing</h3>
+                    <h3 className="m-3">Billing History</h3>
                     <Table className="table table-borderless table-striped">
                         <thead>
                             <tr>

@@ -13,9 +13,19 @@ const warningText = {
 export default function BookAppointment () {
 
     const [dateTime, setDateTime] = useState({});
+    const [unavailableDate, setUnavailableDate] = useState([]);
     const [error, setError] = useState("");
     const [disableButton, setDisableButton] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch('/api/apptsummary/checkdate')
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            setUnavailableDate(data);
+        });
+    }, [])
 
     //extracting current date
     const currentDate = () => {
@@ -28,16 +38,24 @@ export default function BookAppointment () {
     }
 
     const handleDateClick = (info) => {
-        // console.log(info)
-        if(true){
-            // console.log(info.dateStr); //e.g. 2022-10-31T09:30:00+08:00
-            const date = info.dateStr.slice(0,10); //YYYY-MM-DD
-            const time = info.dateStr.slice(11,16); //10:00
-            setDateTime({
-                date: date,
-                time: time
-            });
+
+        const date = info.dateStr.slice(0,10); //YYYY-MM-DD
+        const time = info.dateStr.slice(11,16); //10:00
+
+        for(const element of unavailableDate){
+            if((element.date.slice(0,10) === date) && (element.time === time)){
+                return;
+            }
         }
+
+        setDateTime({
+            date: date,
+            time: time
+        });
+    }
+
+    const handleSelectOverlap = (event) => {
+        return !event.title==="unavailable";
     }
 
     const handleSubmit = (event) => {
@@ -89,6 +107,32 @@ export default function BookAppointment () {
             {error === warningText.invalidDateTime ? error : ""}
         </div>;
 
+    const unavailableEvents = unavailableDate.map((element) => {
+        let hour = parseInt(element.time.slice(0,2));
+        let mins = parseInt(element.time.slice(3,5));
+
+        if(mins + 30 === 30){
+            hour = hour.toString();
+            mins = "30";
+        } else {
+            hour = (hour + 1).toString();
+            mins = "00";
+        }
+
+        element.endTime = hour + mins; //0930 or 1000
+
+        return(
+            {
+                title: 'unavailable',
+                start: `${element.date.slice(0,10)}T${element.time}`,
+                end: `${element.date.slice(0,10)}T${element.endTime}`,
+                backgroundColor: "grey",
+                borderColor: "grey",
+                display: 'background'
+            }
+        )
+    });
+
     return(
         <div className="card m-4 p-5" style={{ width: "60rem", height: "fit-content" }}>
 
@@ -134,12 +178,9 @@ export default function BookAppointment () {
                                     slotMinTime={"09:00:00"}
                                     slotMaxTime={"22:00:00"}
                                     validRange={{start: currentDate()}}
-                                    events={[
-                                        {id: 'unavailable', title: 'unavailable', start: '2022-11-07T09:00', end: '2022-11-07T09:30', backgroundColor: "grey", borderColor: "grey",  display: 'background'},
-                                        {id: 'unavailable', title: 'unavailable', start: '2022-11-09T11:00', end: '2022-11-09T11:30', backgroundColor: "grey", borderColor: "grey", display: 'background'}
-                                    ]}
+                                    events={unavailableEvents}
                                     selectable={true}
-                                    // selectOverlap={handleSelectOverlap}
+                                    selectOverlap={handleSelectOverlap}
                                     dateClick={handleDateClick}
                                 />
                             </div>
