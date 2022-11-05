@@ -22,6 +22,7 @@ const saltRounds = 10;
 app.use(express.static("../client/dist"))
 app.use(cors());
 app.use(express.json()); //this is how Express interprets body from client side
+app.use(express.static("../client/dist"));
 
 
 //* CONTROLLERS

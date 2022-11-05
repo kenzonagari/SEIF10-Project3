@@ -1,7 +1,6 @@
 import NavigationBar from "./Navbar"
 import { Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import '../body.css'
 
 export default function UserApptUpdate () {
 
