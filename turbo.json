@@ -7,7 +7,11 @@
       "build": {
         "dependsOn": ["^build"],
         "outputs": ["dist/**"]
+      },
+      "start": {
+        "dependsOn": ["build"]
       }
     }
-}
+  }
+  
   
