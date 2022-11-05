@@ -26,6 +26,7 @@ export default function BookAppointment () {
     }
 
     const handleDateClick = (info) => {
+        console.log(info)
         // console.log(info.dateStr); //e.g. 2022-10-31T09:30:00+08:00
         const date = info.dateStr.slice(0,10); //YYYY-MM-DD
         const time = info.dateStr.slice(11,16); //10:00
@@ -33,6 +34,10 @@ export default function BookAppointment () {
             date: date,
             time: time
         });
+    }
+
+    const handleSelectOverlap = (event) => {
+        return !(event.groupId === "unavailable");
     }
 
     const handleSubmit = (event) => {
@@ -56,7 +61,18 @@ export default function BookAppointment () {
         } 
 
         //POST
-
+        fetch('/api/apptsummary', {     method: "POST", 
+                                        headers: {
+                                            "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                        },
+                                        body: JSON.stringify(bookingObj) 
+                                })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data)
+            });
 
 
 
@@ -115,11 +131,12 @@ export default function BookAppointment () {
                                     slotMaxTime={"22:00:00"}
                                     validRange={{start: currentDate()}}
                                     events={[
-                                        { title: 'unavailable', start: '2022-11-07T09:00', end: '2022-11-07T09:30', backgroundColor: "grey", borderColor: "grey"},
-                                        { title: 'unavailable', start: '2022-11-09T11:00', end: '2022-11-09T11:30', backgroundColor: "grey", borderColor: "grey"}
+                                        { groupId: "unavailable", title: 'unavailable', start: '2022-11-07T09:00', end: '2022-11-07T09:30', backgroundColor: "grey", borderColor: "grey",  display: 'background'},
+                                        { groupId: "unavailable", title: 'unavailable', start: '2022-11-09T11:00', end: '2022-11-09T11:30', backgroundColor: "grey", borderColor: "grey", display: 'background'}
                                     ]}
-                                    dateClick={handleDateClick}
                                     selectable={true}
+                                    selectOverlap={handleSelectOverlap}
+                                    dateClick={handleDateClick}
                                 />
                             </div>
                         </div>

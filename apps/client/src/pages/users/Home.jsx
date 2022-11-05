@@ -1,4 +1,4 @@
-import Header from "../Header";
+import Header from "./Header";
 import NavigationBar from "./Navbar";
 import UserProfile from "./UserProfile";
 import HealthProfile from "./HealthProfile";
