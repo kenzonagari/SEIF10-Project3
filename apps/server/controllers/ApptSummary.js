@@ -53,9 +53,9 @@ router.post('/', isAuth, async(req, res)=> {
             prescriptionInfo: "NA",
             billingInfo: 0
         });
-        res.status(200).json(req.body);
+        res.status(200).json({msg: "Booking successful"});
     } catch (error) {
-        res.status(500).json({msg: "Server Error"});
+        res.status(500).json({msg: "Server error"});
     }
 })
 
@@ -77,7 +77,7 @@ router.put('/:id', async(req, res)=> {
     try {
         const updateuser = await ApptSummary.findByIdAndUpdate(id);
         if (updateuser === null) {
-            res.status(400).json({msg: "Wrond ID"})
+            res.status(400).json({msg: "Wrong ID"})
         } else {
             res.status(204).json(updateuser)
         }
@@ -93,7 +93,7 @@ router.put('/:id', async(req, res)=> {
         try {
             const deleteuser = await ApptSummary.findByIdAndDelete(id);
             if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
+                res.status(400).json({msg: "Wrong ID"})
             } else {
                 res.status(204).json(deleteuser)
             }
