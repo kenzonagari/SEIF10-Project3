@@ -27,15 +27,14 @@ router.use(session({
 router.get("/seed", async(req, res)=> {
    // await ApptSummary.deleteMany({})
     const apptsummary = await ApptSummary.insertMany([{
-       loginInfo: "63645caec6c9e5bada7368a2",
+        loginInfo: "63645caec6c9e5bada7368a2",
         medPrescription: "636465644769e65dd2d045e1",
-    date: "1990/12/05",
-    time: "10.00",
-    purpose: "Follow-Up",
-    summary: "Vaccination",
-    prescriptionInfo: "NA",
-    billingInfo: 50
-    }])
+        date: "1990/12/05",
+        time: "10.00",
+        purpose: "Follow-Up",
+        summary: "Vaccination",
+        billingInfo: 50
+    }]);
     res.json(apptsummary)
         
 })
@@ -43,16 +42,14 @@ router.get("/seed", async(req, res)=> {
 //* testing
 router.get("/test", async(req, res)=> {
     // await ApptSummary.deleteMany({})
-     const apptsummary = await ApptSummary.insertMany([{
-         
-     date: "1990/12/15",
-     time: "9.00",
-     purpose: "General Check-Up",
-     summary: "Vaccination",
-     prescriptionInfo: "NA",
-     billingInfo: 50
-     }])
-     res.json(apptsummary)
+    const apptsummary = await ApptSummary.insertMany([{
+        date: "1990/12/15",
+        time: "9.00",
+        purpose: "General Check-Up",
+        summary: "Vaccination",
+        billingInfo: 50
+    }])
+    res.json(apptsummary)
  })
 
  //  /admin/:id (admin can read all)
@@ -64,7 +61,8 @@ router.get("/test", async(req, res)=> {
     } catch (error) {
         res.status(500).json({ msg: error });
       } 
- })
+ });
+
 // ROUTES
 // CREATE
 router.post('/', isAuth, async(req, res)=> {
@@ -77,14 +75,14 @@ router.post('/', isAuth, async(req, res)=> {
             time: time,
             purpose: purpose,
             summary: "NA",
-            prescriptionInfo: "NA",
             billingInfo: 0
         });
         res.status(200).json({msg: "Booking successful"});
     } catch (error) {
         res.status(500).json({msg: "Server error"});
     }
-})
+});
+
 // check is the date available if yes -> can book, if no -> another date
 router.get("/checkdate", async(req, res) => {
     try {
@@ -95,17 +93,16 @@ router.get("/checkdate", async(req, res) => {
         res.status(500).json({ msg: error });
       } 
  })
+
 // READ
-
-router.get('/', async (req, res)=> {
+router.get('/', isAuth, async (req, res)=> {
     try {
-        const users = await ApptSummary.find().exec() //need google
-        res.status(200).json(users)
+        const userApptHistory = await ApptSummary.find({ loginInfo: req.session.user._id }).exec();
+        res.status(200).json(userApptHistory);
     } catch (error) {
-        res.status(500).json({error})
+        res.status(500).json({msg: error});
     }
-})
-
+});
 
 // Update
 router.put('/:id', async(req, res)=> {
