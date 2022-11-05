@@ -18,6 +18,34 @@ router.get("/seed", async(req, res) => {
     res.json(medprescription)
 })
 
+//* testing
+router.get("/test", async(req, res) => {
+    //await MedPrescription.deleteMany({})
+    const medprescription = await MedPrescription.insertMany([{
+    startDate: "2022/12/01",
+    duration: "5 days",
+    medicine: "panadols",
+    dosage: "2 times per day",
+    interval: "1 week",
+    instruction: "after meal"
+    }])
+    res.json(medprescription)
+})
+
+router.get("/test2", async(req, res) => {
+    //await MedPrescription.deleteMany({})
+    const medprescription = await MedPrescription.insertMany([{
+        medprescription: "636465644769e65dd2d045e1",
+        startDate: "2022/12/02",
+    duration: "10 days",
+    medicine: "panadols",
+    dosage: "2 times per day",
+    interval: "1 week",
+    instruction: "after meal"
+    }])
+    res.json(medprescription)
+})
+
 // ROUTES
 // CREATE
 router.post('/', async(req, res)=> {
