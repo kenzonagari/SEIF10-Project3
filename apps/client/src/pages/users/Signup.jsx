@@ -1,9 +1,9 @@
-import { Card, Form, Button } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const warningText = {
-    usernameTooShort: "Username needs to have at least 3 letters!",
+    usernameTooShort: "Username must have at least 3 characters!",
     passwordMatch: "Password does not match!",
     usernameTaken: "Username already taken!",
     emailTaken: "Email already taken!"
@@ -17,9 +17,9 @@ export default function Signup () {
     const handleSubmit = (event) => {
         event.preventDefault();
         setDisableButton(true);
+
         let myFormData = new FormData(event.target);
         let userLoginObj = Object.fromEntries(myFormData.entries());
-        
         let loginIsValid = false;
         
         //conditionals
@@ -51,15 +51,15 @@ export default function Signup () {
                     return response.json();
                 })
                 .then((data) => {
-                    console.log(data);
                     if(data.msg === "Username already taken"){
                         setError(warningText.usernameTaken);
                     } else 
                     if(data.msg === "Email already taken"){
                         setError(warningText.emailTaken);
                     } else 
-                    if(data.msg === "login successful"){
-                        return;
+                    if(data.msg === "Sign up successful"){
+                        setError("");
+                        return navigate("/signin");
                     }
                     setDisableButton(false);
                     return;
@@ -71,7 +71,7 @@ export default function Signup () {
     }
 
     const warningPopup = 
-        <div id="passwordHelpBlock" className="form-text ">
+        <div id="passwordHelpBlock" className="form-text text-danger">
             {error === warningText.usernameTooShort ? error :
                 error === warningText.passwordMatch ? error : 
                 error === warningText.usernameTaken ? error :
@@ -80,51 +80,66 @@ export default function Signup () {
         </div>;
 
     return(
-        <div className="card m-4 p-4" style={{ width: "30rem" }}>
-            <h1>Sign Up</h1>
+        <div className="card m-4 p-4 mx-auto" style={{ width: "35rem" }}>
+
+            <div className="mb-3 text-center">
+                <h1>Sign Up</h1>
+            </div>
+
             <Form onSubmit={handleSubmit}>
-               
-                    <div className="mb-3">
-                        <Form.Label>First Name</Form.Label>
-                        <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
+                <div className="row">
+                    <div className="col">
+                        <div className="mb-3">
+                            <Form.Label>First Name*</Form.Label>
+                            <Form.Control type="text" id="firstname" name="firstname" placeholder="Enter first name" required/>
+                        </div>
                     </div>
+                    <div className="col">
+                        <div className="mb-3">
+                            <Form.Label>Last Name*</Form.Label>
+                            <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
+                        </div>
+                    </div>
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Last Name</Form.Label>
-                        <Form.Control type="text" id="lastname" name="lastname" placeholder="Enter last name" required/>
-                    </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
-                        {error === warningText.usernameTooShort ? warningPopup : ""}
-                        {error === warningText.usernameTaken ? warningPopup : ""}
-                    </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Email Address</Form.Label>
-                        <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
-                        {error === warningText.emailTaken ? warningPopup : ""}
-                    </div>
+                <div className="mb-3 col">
+                    <Form.Label>Username*</Form.Label>
+                    <br></br>
+                    <Form.Text className="text-muted">
+                        Username must have at least 3 characters
+                    </Form.Text>
+                    <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
+                    {error === warningText.usernameTooShort ? warningPopup : ""}
+                    {error === warningText.usernameTaken ? warningPopup : ""}
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Email Address*</Form.Label>
+                    <Form.Control type="email" id="email" name="email" placeholder="Enter email address" required/>
+                    {error === warningText.emailTaken ? warningPopup : ""}
+                </div>
 
-                    <div className="mb-3">
-                        <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
-                        {error === warningText.passwordMatch ? warningPopup : ""}
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Password*</Form.Label>
+                    <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
+                </div>
 
-                    <div className="mb-3">
-                        <Button variant="primary" type="submit" disabled={disableButton}>
-                            Sign Up
-                        </Button>
-                    </div>
+                <div className="mb-3">
+                    <Form.Label>Confirm Password*</Form.Label>
+                    <Form.Control type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required/>
+                    {error === warningText.passwordMatch ? warningPopup : ""}
+                </div>
+
+                <div className="mb-3 text-center">
+                    <Button variant="primary" type="submit" disabled={disableButton}>
+                        Sign Up
+                    </Button>
+                </div>
        
             </Form>
+            <p className="mb-3 text-center">Already have an account? <a href="/signin">Sign in here.</a></p>
         </div>
     )
 }
