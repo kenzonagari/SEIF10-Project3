@@ -104,6 +104,16 @@ router.get('/', isAuth, async (req, res)=> {
     }
 });
 
+//Read all
+router.get('/all', async (req, res)=> { //need isAuthAdmin later
+    try {
+        const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
+        res.status(200).json(userApptHistory);
+    } catch (error) {
+        res.status(500).json({msg: error});
+    }
+});
+
 // Update
 router.put('/:id', async(req, res)=> {
     const {id} = req.params
