@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Table } from 'react-bootstrap'
 import HeaderFunction from './Header'
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminHome () {
 
     const [apptData, setApptData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('/api/apptsummary/all')
         .then((response) => response.json())
         .then((data) => {
+            if(data.msg === "server error"){
+                return navigate("/signin");
+            }
             data.sort((a,b) => {
                 if (a.date < b.date) {
                     return -1;

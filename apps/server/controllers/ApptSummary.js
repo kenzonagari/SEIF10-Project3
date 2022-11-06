@@ -110,7 +110,7 @@ router.get('/all', async (req, res)=> { //need isAuthAdmin later
         const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
         res.status(200).json(userApptHistory);
     } catch (error) {
-        res.status(500).json({msg: error});
+        res.status(500).json({msg: "server error"});
     }
 });
 
