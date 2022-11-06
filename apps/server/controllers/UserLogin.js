@@ -64,7 +64,7 @@ router.get("/test", async(req, res) => {
      res.json(userlogin)
  })
 
- router.get("/test2", async(req, res) => {
+router.get("/test2", async(req, res) => {
     // await UserLogin.deleteMany({});
      const userlogin = await UserLogin.insertMany([
          {
@@ -153,6 +153,25 @@ router.post('/signin', async(req, res) => {
             return res.status(200).json({msg: "Redirecting to /createProfile"});
         }
 
+    } catch (error) {
+        return res.status(500).json({msg: error});
+    }
+});
+
+//user sign-out
+router.get('/signout', async(req, res) => {
+    try {
+        if(req.session){
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+            });
+        } else {
+            return res.status(200).json({msg: "Sign out successful"});
+        }
+        return res.status(200).json({msg: "Sign out successful"});
     } catch (error) {
         return res.status(500).json({msg: error});
     }
