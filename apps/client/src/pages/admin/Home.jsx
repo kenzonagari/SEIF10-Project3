@@ -37,13 +37,13 @@ export default function AdminHome () {
         });
     }, [])
 
-    const handleClick = (name) => () => {
-        console.log(name);
+    const handleClick = (appt) => () => {
+        navigate(`/admin/userAppointment/${appt._id}`);
     }
 
     const apptElement = apptData.map((element, index) => {
         return(
-            <tr className='clickable-row' onClick={handleClick(element?.loginInfo?.username)} key={index}>
+            <tr className='clickable-row' onClick={handleClick(element)} key={index} style={{ cursor: "pointer" }}>
                 <th scope="row">{index + 1}</th>
                 <td>{element?.date.slice(0,10)}</td>
                 <td>{element?.loginInfo?.firstname} {element?.loginInfo?.lastname}</td>

@@ -6,6 +6,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const express = require("express");
 const router = express.Router();
 const ApptSummary = require("../models/ApptSummary.js");
+const UserProfile = require("../models/UserProfile.js");
 const session = require("express-session");
 const MongodbSession = require("connect-mongodb-session")(session);
 const isAuth = require("../middlewares/isAuth.js");
@@ -109,6 +110,18 @@ router.get('/all', async (req, res)=> { //need isAuthAdmin later
     try {
         const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
         res.status(200).json(userApptHistory);
+    } catch (error) {
+        res.status(500).json({msg: "server error"});
+    }
+});
+
+//Read one (for admin)
+router.get('/:id', async (req, res)=> { //need isAuthAdmin later
+    const {id} = req.params;
+    try {
+        const userApptHistory = await ApptSummary.findById(id).populate(["loginInfo", "medPrescription"]);
+        const userProfile = await UserProfile.find({ loginInfo: userApptHistory.loginInfo._id }).populate(["loginInfo"]);
+        res.status(200).json({userApptHistory, userProfile});
     } catch (error) {
         res.status(500).json({msg: "server error"});
     }

@@ -28,9 +28,9 @@ function App() {
           <Route path="/healthProfile" element={<Home page="healthProfile" />} />
           <Route path="/bookAppointment" element={<Home page="bookAppointment" />} />
           <Route path="/admin/home" element={<AdminHome />} />
-          <Route path="/admin/userAppointment" element={<UserAppointment />} />
-          <Route path="/admin/userApptUpdate" element={<UserApptUpdate />} />
-          <Route path="/admin/userProfileUpdate" element={<UserProfileUpdate />} />
+          <Route path="/admin/userAppointment/:apptId" element={<UserAppointment />} />
+          <Route path="/admin/userApptUpdate/:apptId" element={<UserApptUpdate />} />
+          <Route path="/admin/userProfileUpdate/:userProfileId" element={<UserProfileUpdate />} />
           
         </Routes>
       </BrowserRouter>

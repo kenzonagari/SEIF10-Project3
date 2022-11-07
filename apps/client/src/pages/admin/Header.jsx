@@ -1,10 +1,6 @@
 import { Navbar } from 'react-bootstrap'
 
-export default function HeaderFunction ({userProfileInfo}) {
-
-    const firstInitial = userProfileInfo?.loginInfo?.firstname.slice(0,1);
-    const lastInitial = userProfileInfo?.loginInfo?.lastname.slice(0,1);
-    const initial = (firstInitial && lastInitial) ? `${firstInitial}${lastInitial}` : "";
+export default function HeaderFunction () {
 
     return(
         <Navbar className="navbar-expand-lg bg-secondary d-flex flex-wrap justify-content-between align-items-center" style={{"--bs-bg-opacity": .1}}>
@@ -21,6 +17,7 @@ export default function HeaderFunction ({userProfileInfo}) {
                             <h5>Hi, Admin!</h5>
                             </a>
                             <ul className="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a className="dropdown-item" href="/admin/home">Home</a></li>
                                 <li><a className="dropdown-item" href="/signout">Sign Out</a></li>
                             </ul>
                         </li>
