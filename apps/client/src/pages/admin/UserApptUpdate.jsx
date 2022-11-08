@@ -1,79 +1,157 @@
 import NavigationBar from "./Navbar"
 import { Form } from "react-bootstrap"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom"
+import HeaderFunction from "./Header";
 
 export default function UserApptUpdate () {
 
     const navigate = useNavigate();
+    const { apptId } = useParams();
+    const [apptInfoData, setApptInfoData] = useState({});
+    const [userProfileInfo, setuserProfileInfo] = useState({});
+    const [disableButton, setDisableButton] = useState(false);
 
-    const handleLink = () => {
-        navigate('/admin/userAppointment');
+    useEffect(() => {
+        fetch(`/api/apptsummary/${apptId}`)
+            .then((response) => response.json())
+            .then((data) => {
+                // console.log(data["userApptHistory"], data["userProfile"][0]);
+                setApptInfoData(data["userApptHistory"]);
+                setuserProfileInfo(data["userProfile"][0]);
+            });
+    }, [])
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setDisableButton(true);
+
+        let myFormData = new FormData(event.target);
+        let apptSummaryObj = Object.fromEntries(myFormData.entries());
+
+        //conditionals
+        
+
+        if(apptSummaryObj.followUp){
+            apptSummaryObj.followUp = true;
+        } else {
+            apptSummaryObj.followUp = false;
+        }
+
+        if(!apptInfoData.medPrescription){
+            fetch('/api/userlogin/signin', {    method: "POST", 
+                                                headers: {
+                                                    "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                },
+                                                body: JSON.stringify(userLoginObj) 
+                                    })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    if(data.msg === "Email not found"){
+                        setError(warningText.emailNotFound);
+                    } else 
+                    if(data.msg === "Incorrect password"){
+                        setError(warningText.incorrectPassword);
+                    } else 
+                    if(data.msg === "Redirecting to /home"){
+                        setError("");
+                        return navigate("/home");
+                    } else
+                    if(data.msg === "Redirecting to /createProfile"){
+                        setError("");
+                        return navigate("/createProfile");
+                    } else 
+                    if(data.msg === "Redirecting to /admin/home"){
+                        setError("");
+                        return navigate("/admin/home");
+                    }
+                    setDisableButton(false);
+                    return;
+                })
+        } else {
+            console.log("med exists")
+        }
+
+        console.log(apptSummaryObj);
+    }
+
+    const handleCancel = () => {
+        navigate(`/admin/userAppointment/${apptId}`);
     }
 
     return (
         <>
             <div className="body">
+                <HeaderFunction />
+                <div className="d-flex flex-row">
+                    <NavigationBar userProfileInfo={userProfileInfo} />
+                    <div className="card m-4 p-5" style={{ width: "65%", height: "fit-content" }}>
+                        <h2 className="card-title mb-5">Appointment Overview Update</h2>
+                        <div className="mb-4">
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Date</Form.Label>
+                                    <Form.Control type="text" id="date" placeholder={apptInfoData?.date?.slice(0,10)} readOnly/>
+                                </Form.Group>
 
-                <NavigationBar />
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Time</Form.Label>
+                                    <Form.Control type="text" id="time" placeholder={apptInfoData?.time} readOnly/>
+                                </Form.Group>
 
-                <div className="user-profile">
-                    <h1>Appointment Overview Update</h1>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Appointment Type</Form.Label>
+                                    <Form.Control type="text" id="purpose" name="purpose" defaultValue={apptInfoData?.purpose} required/>
+                                </Form.Group>
 
-                    <div className="appt basic-info-update">
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Require follow-up?</Form.Label>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="checkbox" id="followUp" name="followUp" defaultValue={apptInfoData?.followUp ? "on" : "off"}/>
+                                    </div>
+                                </Form.Group>
 
-                        <Form>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Billing <span className="text-secondary">(in SGD)</span></Form.Label>
+                                    <Form.Control type="number" id="billingInfo" name="billingInfo" defaultValue={apptInfoData?.billingInfo} required/>
+                                </Form.Group>
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Date</Form.Label>
-                                <Form.Control type="text" id="date" placeholder="appointment date" />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                                <Form.Label>Time</Form.Label>
-                                <Form.Control type="text" id="time" placeholder="appointment time" />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                                <Form.Label>Appointment Type</Form.Label>
-                                <Form.Control type="text" id="appointmentType" placeholder="appointment type" />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                                <Form.Label>Require follow-up?</Form.Label>
-                                <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" id="defaultCheck2"/>
+                                <div className="mb-3">
+                                    <Form.Label>Summary | Diagnosis</Form.Label>
+                                    <textarea className="form-control" id="summary" name="summary" rows="3" cols="100" defaultValue={apptInfoData?.summary} required></textarea>
                                 </div>
-                            </Form.Group>
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Billing</Form.Label>
-                                <Form.Control type="number" id="billing" placeholder="(in SGD)" />
-                            </Form.Group>
+                                <div className="card p-4 bg-primary bg-opacity-25 mb-5" style={{ width: "100%", height: "fit-content" }}>
+                                    <h3 className="card-title mb-4">Prescription</h3>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Medicine</Form.Label>
+                                        <Form.Control type="text" id="medicine" name="medicine" defaultValue={apptInfoData?.medPrescription?.medicine} required/>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Dosage</Form.Label>
+                                        <Form.Control type="text" id="dosage" name="dosage" defaultValue={apptInfoData?.medPrescription?.dosage} required/>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Duration</Form.Label>
+                                        <Form.Control type="text" id="duration" name="duration" defaultValue={apptInfoData?.medPrescription?.duration} required/>
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Instruction</Form.Label>
+                                        <Form.Control type="text" id="instruction" name="instruction" defaultValue={apptInfoData?.medPrescription?.instruction} required/>
+                                    </Form.Group>
+                                </div>
 
-                        </Form>
+                                <div className="d-flex flex-row justify-content-around my-4">
+                                    <button type="submit" className="btn btn-primary p-3">Update Appointment</button>
+                                    <button type="button" className="btn btn-warning p-3" onClick={handleCancel}>Cancel Update</button>
+                                </div>
 
-                    </div>
-
-                    <div className="appt summary">
-                        <h3>Summary | Diagnosis</h3>
-                        <div className="form-group">
-                            <textarea className="form-control" id="appt-summary" rows="10" cols="100"></textarea>
+                            </Form>
                         </div>
                     </div>
-
-                    <div className="appt medication">
-                        <h3>Medication</h3>
-                        <div className="form-group">
-                            <textarea className="form-control" id="appt-medication" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <div className="appt overview-btns">
-                        <button type="button" className="btn btn-primary" onClick={handleLink}>Submit</button>
-                      </div>
-
                 </div>
-
             </div>
         </>
     )
