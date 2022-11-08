@@ -5,7 +5,7 @@ export default function HeaderFunction () {
     return(
         <Navbar className="navbar-expand-lg bg-secondary d-flex flex-wrap justify-content-between align-items-center" style={{"--bs-bg-opacity": .1}}>
             <div className="container-fluid">
-                <a className="navbar-brand h1 mx-4 my-0" href="#">
+                <a className="navbar-brand h1 mx-4 my-0" href="/admin/home">
                     <h2>
                         HealthcarePal
                     </h2>

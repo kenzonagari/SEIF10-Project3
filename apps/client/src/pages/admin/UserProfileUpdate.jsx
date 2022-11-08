@@ -13,12 +13,59 @@ export default function UserProfileUpdate () {
         fetch(`/api/userprofile/admin/${userProfileId}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                console.log(data)
+                setUserProfileInfo(data);
             });
     }, [])
 
-    const handleLink = () => {
-        navigate('/admin/userAppointment');
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        let myFormData = new FormData(event.target);
+        let userProfileObj = Object.fromEntries(myFormData.entries());
+
+        //conditionals
+
+        if(userProfileObj.medAllergies === ""){
+            userProfileObj.medAllergies = "NA";
+        }
+
+        if(userProfileObj.pastIllnesses === ""){
+            userProfileObj.pastIllnesses = "NA";
+        }
+
+        if(userProfileObj.sex === ""){
+            userProfileObj.sex = "Not specified";
+        }
+
+        //refactor DOB
+        userProfileObj.dateOfBirth = `${userProfileObj.year}` + '-' + `${userProfileObj.month}` + '-' + `${userProfileObj.date}`;
+        delete userProfileObj.date;
+        delete userProfileObj.month;
+        delete userProfileObj.year;
+
+        console.log(userProfileObj)
+    }
+
+    const dateOption = [];
+    const monthOption = [];
+    const yearOption = [];
+
+    for(let i = 1; i <= 31 ; i++){
+        dateOption.push(
+            <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
+        );
+        if(i <= 12){
+            monthOption.push(
+                <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
+            );
+        }
+    }
+
+    for(let i = 2022; i > 1900 ; i--){
+        yearOption.push(
+            <option value={`${i}`} key={`${i}`}>{`${i}`}</option>
+        );
     }
 
     return (
@@ -31,20 +78,20 @@ export default function UserProfileUpdate () {
                     <h1>Update Patient Profile</h1>
                 </div>
 
-                <Form >
+                <Form onSubmit={handleSubmit}>
 
-                    <fieldset>
+                    <div className="bg-secondary bg-opacity-10 p-3 mb-3 rounded-3">
                         <div className="row">
                             <div className="col">
                                 <div className="mb-3">
                                     <Form.Label>Username</Form.Label>
-                                    <Form.Control type="text" id="username" placeholder={`${userProfileInfo?.username ? userProfileInfo.username : "username"}`} />
+                                    <Form.Control type="text" id="username" name="username" defaultValue={userProfileInfo?.loginInfo?.username} />
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="mb-3">
                                     <Form.Label>Email address</Form.Label>
-                                    <Form.Control type="email" id="email" placeholder={`${userProfileInfo?.email ? userProfileInfo.email : "email"}`} />
+                                    <Form.Control type="email" id="email" name="email" defaultValue={userProfileInfo?.loginInfo?.email} />
                                 </div>
                             </div>
                         </div>
@@ -52,39 +99,37 @@ export default function UserProfileUpdate () {
                             <div className="col">
                                 <div className="mb-3">
                                     <Form.Label>First Name</Form.Label>
-                                    <Form.Control type="text" id="firstName" placeholder={`${userProfileInfo?.firstname ? userProfileInfo.firstname : "first name"}`} />
+                                    <Form.Control type="text" id="firstname" name="firstname" defaultValue={userProfileInfo?.loginInfo?.firstname} />
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="mb-3">
                                     <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type="text" id="lastName" placeholder={`${userProfileInfo?.lastname ? userProfileInfo.lastname : "last name"}`} />
+                                    <Form.Control type="text" id="lastname" name="lastname" defaultValue={userProfileInfo?.loginInfo?.lastname} />
                                 </div>
                             </div>
                         </div>
-                        <div className="mb-3">
-                            <Form.Text className="text-muted">
-                                Email us at healthcarepal@fakeemail.com to request changes to the information above
-                            </Form.Text>
-                        </div>
-                    </fieldset>
+                    </div>
 
                     <div className="mb-3">
                         <Form.Label>Date Of Birth*</Form.Label>
                         <div className="row">
                             <div className="col">
                                 <select className="form-select mb-3" id="date" name="date" required>
-                                    <option value="" className="text-secondary">DD</option>
+                                    <option value={parseInt(userProfileInfo?.dateOfBirth?.slice(8,10)).toString()}>{parseInt(userProfileInfo?.dateOfBirth?.slice(8,10)).toString()}</option>
+                                    {dateOption}
                                 </select>
                             </div>
                             <div className="col">
                                 <select className="form-select mb-3" id="month" name="month" required>
-                                    <option value="">MM</option>
+                                    <option value={parseInt(userProfileInfo?.dateOfBirth?.slice(5,7)).toString()}>{parseInt(userProfileInfo?.dateOfBirth?.slice(5,7)).toString()}</option>
+                                    {monthOption}
                                 </select>
                             </div>
                             <div className="col">
                                 <select className="form-select mb-3" id="year" name="year" required>
-                                    <option value="">YYYY</option>
+                                    <option value={parseInt(userProfileInfo?.dateOfBirth?.slice(0,4)).toString()}>{parseInt(userProfileInfo?.dateOfBirth?.slice(0,4)).toString()}</option>
+                                    {yearOption}
                                 </select>
                             </div>
                         </div>
@@ -95,7 +140,7 @@ export default function UserProfileUpdate () {
                             <div className="form-group mb-3">
                                 <label className='form-label'>Sex*</label>
                                 <select className="form-select mb-3" id="sex" name="sex" required>
-                                    <option value=""></option>
+                                    <option value={userProfileInfo?.sex}>{userProfileInfo?.sex}</option>
                                     <option value="M">Male</option>
                                     <option value="F">Female</option>
                                     <option value="NB">Non-Binary</option>
@@ -105,30 +150,33 @@ export default function UserProfileUpdate () {
                         <div className='col'>
                             <div className="mb-3 md-10">
                                 <Form.Label>Mobile No*</Form.Label>
-                                <Form.Control type="text" id="mobile" name="mobile" placeholder="12345678" required/>
+                                <Form.Control type="text" id="mobile" name="mobile" defaultValue={userProfileInfo?.mobile} required/>
                             </div>
                         </div>
                         <div className='col'>
                             <div className="mb-3 md-10">
                             <Form.Label>NRIC/FIN*</Form.Label>
-                            <Form.Control type="text" id="ic" name="ic" placeholder="S12345678A" required/>
+                            <Form.Control type="text" id="ic" name="ic" defaultValue={userProfileInfo?.ic} required/>
                         </div>
                     </div>
                     </div>
                 
                     <div className="mb-3">
                         <Form.Label>Medication Allergies</Form.Label>
-                        <textarea className="form-control" type="text" id="medAllergies" name="medAllergies" defaultValue="NA" />
+                        <textarea className="form-control" type="text" id="medAllergies" name="medAllergies" defaultValue={userProfileInfo?.medAllergies} />
                     </div>
 
                     <div className="mb-3">
                         <Form.Label>Past Illnesses</Form.Label>
-                        <textarea className="form-control" type="text" id="pastIllnesses" name="pastIllnesses" defaultValue="NA" />
+                        <textarea className="form-control" type="text" id="pastIllnesses" name="pastIllnesses" defaultValue={userProfileInfo?.pastIllnesses} />
                     </div>
             
-                    <div className="mb-3 text-center">
+                    <div className="mt-5 mb-3 text-center d-flex justify-content-around">
                         <Button variant="primary" type="submit" disabled={false}>
                             Update Profile
+                        </Button>
+                        <Button variant="danger" type="button" disabled={false}>
+                            Delete Profile
                         </Button>
                     </div>
 
