@@ -121,15 +121,25 @@ router.put('/:id', isAuth, async(req, res)=> {
 // admin update user profile
 router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     const { id } = req.params;
+    const {dateOfBirth, sex, mobile, ic, medAllergies, pastIllnesses} = req.body;
+
     try {
-        const adminUpdate = await UserProfile.findByIdAndUpdate(id);
-        if (adminUpdate === null) {
+        const userProfileUpdate = await UserProfile.findByIdAndUpdate(id, {
+            dateOfBirth: dateOfBirth,
+            sex: sex,
+            mobile: mobile,
+            ic: ic,
+            medAllergies: medAllergies,
+            pastIllnesses: pastIllnesses
+        });
+
+        if (userProfileUpdate === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
-            res.status(204).json(adminUpdate);
+            res.status(200).json({msg: "Redirecting to /admin/home"});
         }
     } catch (error) {
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: "input error"})
     }
 })
 

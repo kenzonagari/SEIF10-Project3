@@ -7,19 +7,21 @@ export default function UserProfileUpdate () {
 
     const navigate = useNavigate();
     const { userProfileId } = useParams();
+    const [error, setError] = useState("");
+    const [disableButton, setDisableButton] = useState(false);
     const [userProfileInfo, setUserProfileInfo] = useState({});
 
     useEffect(() => {
         fetch(`/api/userprofile/admin/${userProfileId}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 setUserProfileInfo(data);
             });
     }, [])
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setDisableButton(true);
 
         let myFormData = new FormData(event.target);
         let userProfileObj = Object.fromEntries(myFormData.entries());
@@ -44,7 +46,27 @@ export default function UserProfileUpdate () {
         delete userProfileObj.month;
         delete userProfileObj.year;
 
-        console.log(userProfileObj)
+        // console.log(userProfileObj)
+        //PUT
+        fetch(`/api/userprofile/admin/${userProfileId}`, {   method: "PUT", 
+                                    headers: {
+                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                    },
+                                    body: JSON.stringify(userProfileObj) 
+                                })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if(data.msg === "Redirecting to /admin/home"){
+                    setError("");
+                    return navigate(`/admin/home`);
+                } else {
+                    setError("Server error");
+                    setDisableButton(false);
+                    return;
+                }
+            });
     }
 
     const dateOption = [];
@@ -80,7 +102,7 @@ export default function UserProfileUpdate () {
 
                 <Form onSubmit={handleSubmit}>
 
-                    <div className="bg-secondary bg-opacity-10 p-3 mb-3 rounded-3">
+                    <fieldset className="bg-secondary bg-opacity-10 p-3 mb-3 rounded-3" disabled>
                         <div className="row">
                             <div className="col">
                                 <div className="mb-3">
@@ -109,7 +131,7 @@ export default function UserProfileUpdate () {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </fieldset>
 
                     <div className="mb-3">
                         <Form.Label>Date Of Birth*</Form.Label>
