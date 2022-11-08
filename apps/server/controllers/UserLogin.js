@@ -65,7 +65,7 @@ router.get("/test", async(req, res) => {
      res.json(userlogin)
  })
 
- router.get("/test2", async(req, res) => {
+router.get("/test2", async(req, res) => {
     // await UserLogin.deleteMany({});
      const userlogin = await UserLogin.insertMany([
          {
@@ -81,7 +81,7 @@ router.get("/test", async(req, res) => {
  
 
 // ROUTES
-// CREATE
+//* CREATE
 //sign-up
 router.post('/', async(req, res) => {
     const {firstname, lastname, username, email, password} = req.body;
@@ -122,7 +122,7 @@ router.post('/', async(req, res) => {
     };
 });
 
-// user sign-in
+//user/admin sign-in
 router.post('/signin', async(req, res) => {
     const { email, password } = req.body;
     try {
@@ -138,20 +138,38 @@ router.post('/signin', async(req, res) => {
         if (passwordMatch === false) {
             return res.status(401).json({msg: "Incorrect password"});
         }
-        
-        req.session.isAuth = true;
-        req.session.user = {
-            _id: user._id,
-            username: user.username,
-            password: user.password
-        }
 
-        let checkUserProfile = await UserProfile.findOne({ "loginInfo": req.session.user._id });
+        //check admin or user sign in
 
-        if(checkUserProfile){
-            return res.status(200).json({msg: "Redirecting to /home"});
+        if(user.role === "admin"){
+
+            req.session.isAuthAdmin = true;
+            req.session.user = {
+                _id: user._id,
+                username: user.username,
+                password: user.password
+            };
+            return res.status(200).json({msg: "Redirecting to /admin/home"});
+
+        } else if(user.role === "user"){
+
+            req.session.isAuth = true;
+            req.session.user = {
+                _id: user._id,
+                username: user.username,
+                password: user.password
+            };
+    
+            let checkUserProfile = await UserProfile.findOne({ "loginInfo": req.session.user._id });
+    
+            if(checkUserProfile){
+                return res.status(200).json({msg: "Redirecting to /home"});
+            } else {
+                return res.status(200).json({msg: "Redirecting to /createProfile"});
+            }
+
         } else {
-            return res.status(200).json({msg: "Redirecting to /createProfile"});
+            return res.status(500).json({msg: error});
         }
 
     } catch (error) {
@@ -159,24 +177,26 @@ router.post('/signin', async(req, res) => {
     }
 });
 
-// admin sign-in
-router.post('/admin/signin', async(req, res) => {
-    const { email, password} = req.body
+//* UPDATE
+//user sign-out
+router.get('/signout', async(req, res) => {
     try {
-        const user = await UserLogin.findOne({email});
-        const isMatch = await bcrypt.compare(password, user.password)
-        if (!user || !isMatch) {
-            res.status(401).json("Email/Password not found/match!")
+        if(req.session){
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log(err);
+                    return next(err);
+                }
+            });
+        } else {
+            return res.status(200).json({msg: "Sign out successful"});
         }
-        req.session.isAuthAdmin = true
-        console.log(req.session.cookie)
-         res.status(200).json("Admin sign in successfully!")
+        return res.status(200).json({msg: "Sign out successful"});
     } catch (error) {
-        res.status(500).json({msg: error});
-    } 
+        return res.status(500).json({msg: error});
+    }
 });
 
-// READ
 router.get('/', isAuth, async(req, res) => {
     try {
         const userLoginInfo = await UserLogin.find({ "_id" : req.session.user._id }).exec();
@@ -186,7 +206,7 @@ router.get('/', isAuth, async(req, res) => {
     }
 });
 
-// Update
+//* Update
 router.put('/:id', async(req, res)=> {
     const {id} = req.params
     try {
@@ -202,7 +222,7 @@ router.put('/:id', async(req, res)=> {
     }
     })
 
-// DELETE
+//* DELETE
     router.delete('/:id', async(req, res)=> {
         const {id} = req.params
         try {
