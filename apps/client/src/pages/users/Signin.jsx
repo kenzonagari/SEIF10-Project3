@@ -52,6 +52,10 @@ export default function Signin () {
                     if(data.msg === "Redirecting to /createProfile"){
                         setError("");
                         return navigate("/createProfile");
+                    } else 
+                    if(data.msg === "Redirecting to /admin/home"){
+                        setError("");
+                        return navigate("/admin/home");
                     }
                     setDisableButton(false);
                     return;

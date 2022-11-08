@@ -44,7 +44,7 @@ router.get("/seed", async(req, res) => {
 
 
 // ROUTES
-// CREATE
+//* CREATE
 // user create profile
 router.post('/', isAuth, async(req, res)=> {
     req.body.loginInfo = req.session.user._id;
@@ -57,16 +57,7 @@ router.post('/', isAuth, async(req, res)=> {
     }
 });
 
-
-
-// router.post('/logout', (req, res)=> {
-//     req.session.destroy((err)=> {
-//         if(err) throw err;
-//         res.json({msg: "Logged Out!"})
-//     })
-// })
-
-// READ
+//* READ
 // user read user profile
 router.get('/', isAuth, async(req, res) => {
     try {
@@ -89,7 +80,7 @@ router.get("/test", async(req, res) => {
     })
 
 //admin read user profile
-router.get('/admin/:id', async(req, res) => { //need isAuthAdmin
+router.get('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     const { id } = req.params;
     try {
         const adminUserProfileRead = await UserProfile.findById(id).populate(["loginInfo"]);
@@ -103,7 +94,7 @@ router.get('/admin/:id', async(req, res) => { //need isAuthAdmin
     }
 })
 
-// Update
+//* UPDATE
 // user update user profile
 router.put('/:id', isAuth, async(req, res)=> {
     const { id } = req.params;
@@ -128,7 +119,7 @@ router.put('/:id', isAuth, async(req, res)=> {
 })
 
 // admin update user profile
-router.put('/admin/:id', async(req, res) => { //need isAuthAdmin
+router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     const { id } = req.params;
     try {
         const adminUpdate = await UserProfile.findByIdAndUpdate(id);
@@ -142,7 +133,7 @@ router.put('/admin/:id', async(req, res) => { //need isAuthAdmin
     }
 })
 
-// DELETE
+//* DELETE
 // only admin can delete user profile
 router.delete('/admin/:id', isAuthAdmin, async(req, res)=> {
     const {id} = req.params

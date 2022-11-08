@@ -106,7 +106,7 @@ router.get('/', isAuth, async (req, res)=> {
 });
 
 //Read all
-router.get('/all', async (req, res)=> { //need isAuthAdmin later
+router.get('/all', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
     try {
         const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
         res.status(200).json(userApptHistory);
@@ -116,7 +116,7 @@ router.get('/all', async (req, res)=> { //need isAuthAdmin later
 });
 
 //Read one (for admin)
-router.get('/:id', async (req, res)=> { //need isAuthAdmin later
+router.get('/:id', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
     const {id} = req.params;
     try {
         const userApptHistory = await ApptSummary.findById(id).populate(["loginInfo", "medPrescription"]);
