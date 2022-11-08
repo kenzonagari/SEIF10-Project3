@@ -34,7 +34,8 @@ router.get("/seed", async(req, res)=> {
         time: "10.00",
         purpose: "Follow-Up",
         summary: "Vaccination",
-        billingInfo: 50
+        billingInfo: 50,
+        
     }]);
     res.json(apptsummary)
         
@@ -53,7 +54,18 @@ router.get("/test", async(req, res)=> {
     res.json(apptsummary)
  })
 
- //  /admin/:id (admin can read all)
+ // admin can read selected user's everything
+ router.get("/test2/:id", async(req, res) => {
+    try {
+        const alldata = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
+      
+        res.status(200).json(alldata)
+    } catch (error) {
+        res.status(500).json({ msg: "error" });
+      } 
+ })
+
+ //  admin can read all user's everything
  router.get("/test2", async(req, res) => {
     try {
         const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
@@ -84,8 +96,8 @@ router.post('/', isAuth, async(req, res)=> {
     }
 });
 
-// check is the date available if yes -> can book, if no -> another date
-router.get("/checkdate", async(req, res) => {
+// check is the date available if yes -> can book
+router.get("/checkdate", isAuth, async(req, res) => {
     try {
         const checkdate = await ApptSummary.find({}, {date:1, time:1})
       console.log(checkdate)
@@ -158,6 +170,16 @@ router.put('/:id', async(req, res)=> {
             res.status(500).json({msg: error})
         }
         })
+    // admin delete selected user's everything
+    router.get("/admin/:id", async(req, res) => {
+        try {
+            const selecteduser = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
+            const deleteuser = await selecteduser.update({_id: id}, { $unset: "purpose" })
+            res.status(200).json(deleteuser)
+        } catch (error) {
+            res.status(500).json({ msg: error });
+          } 
+     })
     
     // EXPORT
 module.exports = router;

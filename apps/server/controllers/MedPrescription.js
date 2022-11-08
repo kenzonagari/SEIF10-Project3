@@ -7,7 +7,7 @@ const MedPrescription = require("../models/MedPrescription.js");
 router.get("/seed", async(req, res) => {
     //await MedPrescription.deleteMany({})
     const medprescription = await MedPrescription.insertMany([{
-        loginInfo: "6358d9e079d6f26ab0fb7bd6",
+    loginInfo: "6358d9e079d6f26ab0fb7bd6",
     startDate: "2022/12/15",
     duration: "5 days",
     medicine: "panadol",
