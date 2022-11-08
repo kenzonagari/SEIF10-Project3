@@ -51,6 +51,7 @@ export default function AdminHome () {
                 <td>{element?.purpose}</td>
                 <td>{element?.time}</td>
                 <td>{parseInt(element?.time.slice(0,2)) < 12 ? "AM" : "PM"}</td>
+                <td>{element?.apptCompleted ? "✓" : ""}</td>
             </tr>
         )
     });
@@ -74,6 +75,7 @@ export default function AdminHome () {
                                 <th scope="col">Appt. Type</th>
                                 <th scope="col">Appt. Time</th>
                                 <th scope="col">AM/PM</th>
+                                <th scope="col">Appt. Completed?</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -9,6 +9,7 @@ export default function UserApptUpdate () {
     const navigate = useNavigate();
     const { apptId } = useParams();
     const [apptInfoData, setApptInfoData] = useState({});
+    const [error, setError] = useState("");
     const [userProfileInfo, setuserProfileInfo] = useState({});
     const [disableButton, setDisableButton] = useState(false);
 
@@ -30,8 +31,7 @@ export default function UserApptUpdate () {
         let apptSummaryObj = Object.fromEntries(myFormData.entries());
 
         //conditionals
-        
-
+        apptSummaryObj.startDate = apptInfoData.date.slice(0,10);
         if(apptSummaryObj.followUp){
             apptSummaryObj.followUp = true;
         } else {
@@ -39,42 +39,70 @@ export default function UserApptUpdate () {
         }
 
         if(!apptInfoData.medPrescription){
-            fetch('/api/userlogin/signin', {    method: "POST", 
-                                                headers: {
-                                                    "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
-                                                },
-                                                body: JSON.stringify(userLoginObj) 
-                                    })
+            fetch('/api/medprescription/admin', {   method: "POST", 
+                                                    headers: {
+                                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                    },
+                                                    body: JSON.stringify(apptSummaryObj) 
+                                                })
                 .then((response) => {
                     return response.json();
                 })
                 .then((data) => {
-                    if(data.msg === "Email not found"){
-                        setError(warningText.emailNotFound);
-                    } else 
-                    if(data.msg === "Incorrect password"){
-                        setError(warningText.incorrectPassword);
-                    } else 
-                    if(data.msg === "Redirecting to /home"){
-                        setError("");
-                        return navigate("/home");
-                    } else
-                    if(data.msg === "Redirecting to /createProfile"){
-                        setError("");
-                        return navigate("/createProfile");
-                    } else 
-                    if(data.msg === "Redirecting to /admin/home"){
-                        setError("");
-                        return navigate("/admin/home");
-                    }
-                    setDisableButton(false);
-                    return;
-                })
+                    apptSummaryObj.medPrescription = data._id;
+                    fetch(`/api/apptsummary/${apptId}`, {   method: "PUT", 
+                                                        headers: {
+                                                            "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                        },
+                                                        body: JSON.stringify(apptSummaryObj) 
+                                                })
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            console.log(data)
+                            if(data.msg === "Update successful"){
+                                setError("");
+                                return navigate(`/admin/userAppointment/${apptId}`);
+                            } else {
+                                setError("Server error");
+                                setDisableButton(false);
+                                return;
+                            }
+                        });
+                });
         } else {
-            console.log("med exists")
+            fetch(`/api/medprescription/${apptInfoData.medPrescription._id}`, {     method: "PUT", 
+                                                                                    headers: {
+                                                                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                                                    },
+                                                                                    body: JSON.stringify(apptSummaryObj) 
+                                                                            })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    fetch(`/api/apptsummary/${apptId}`, {   method: "PUT", 
+                                                            headers: {
+                                                                "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                            },
+                                                            body: JSON.stringify(apptSummaryObj) 
+                                                    })
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            if(data.msg === "Update successful"){
+                                setError("");
+                                return navigate(`/admin/userAppointment/${apptId}`);
+                            } else {
+                                setError("Server error");
+                                setDisableButton(false);
+                                return;
+                            }
+                        });
+                });
         }
-
-        console.log(apptSummaryObj);
     }
 
     const handleCancel = () => {
@@ -144,7 +172,7 @@ export default function UserApptUpdate () {
                                 </div>
 
                                 <div className="d-flex flex-row justify-content-around my-4">
-                                    <button type="submit" className="btn btn-primary p-3">Update Appointment</button>
+                                    <button type="submit" className="btn btn-primary p-3" disabled={disableButton}>Update Appointment</button>
                                     <button type="button" className="btn btn-warning p-3" onClick={handleCancel}>Cancel Update</button>
                                 </div>
 

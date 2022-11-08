@@ -40,9 +40,6 @@ router.get("/seed", async(req, res) => {
     res.json(userprofile)
 })
 
-
-
-
 // ROUTES
 //* CREATE
 // user create profile
@@ -57,9 +54,6 @@ router.post('/', isAuth, async(req, res)=> {
     }
 });
 
-
-
-
 router.post('/logout', (req, res)=> {
     req.session.isAuth = false
     req.session.destroy((err)=> {
@@ -67,7 +61,6 @@ router.post('/logout', (req, res)=> {
         res.json({msg: "Logged Out!"})
     })
 })
-
 
 //* READ
 // user read user profile

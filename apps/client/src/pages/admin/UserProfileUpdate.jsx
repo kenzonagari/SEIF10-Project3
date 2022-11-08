@@ -48,12 +48,12 @@ export default function UserProfileUpdate () {
 
         // console.log(userProfileObj)
         //PUT
-        fetch(`/api/userprofile/admin/${userProfileId}`, {   method: "PUT", 
-                                    headers: {
-                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
-                                    },
-                                    body: JSON.stringify(userProfileObj) 
-                                })
+        fetch(`/api/userprofile/admin/${userProfileId}`, {  method: "PUT", 
+                                                            headers: {
+                                                                "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                            },
+                                                            body: JSON.stringify(userProfileObj) 
+                                                        })
             .then((response) => {
                 return response.json();
             })
@@ -194,10 +194,10 @@ export default function UserProfileUpdate () {
                     </div>
             
                     <div className="mt-5 mb-3 text-center d-flex justify-content-around">
-                        <Button variant="primary" type="submit" disabled={false}>
+                        <Button variant="primary" type="submit" disabled={disableButton}>
                             Update Profile
                         </Button>
-                        <Button variant="danger" type="button" disabled={false}>
+                        <Button variant="danger" type="button" disabled={disableButton}>
                             Delete Profile
                         </Button>
                     </div>
