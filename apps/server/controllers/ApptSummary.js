@@ -170,16 +170,7 @@ router.put('/:id', async(req, res)=> {
             res.status(500).json({msg: error})
         }
         })
-    // admin delete selected user's everything
-    router.get("/admin/:id", async(req, res) => {
-        try {
-            const selecteduser = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
-            const deleteuser = await selecteduser.update({_id: id}, { $unset: "purpose" })
-            res.status(200).json(deleteuser)
-        } catch (error) {
-            res.status(500).json({ msg: error });
-          } 
-     })
+    
     
     // EXPORT
 module.exports = router;
