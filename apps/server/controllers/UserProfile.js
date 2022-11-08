@@ -44,7 +44,7 @@ router.get("/seed", async(req, res) => {
 
 
 // ROUTES
-// CREATE
+//* CREATE
 // user create profile
 router.post('/', isAuth, async(req, res)=> {
     req.body.loginInfo = req.session.user._id;
@@ -57,16 +57,7 @@ router.post('/', isAuth, async(req, res)=> {
     }
 });
 
-
-
-// router.post('/logout', (req, res)=> {
-//     req.session.destroy((err)=> {
-//         if(err) throw err;
-//         res.json({msg: "Logged Out!"})
-//     })
-// })
-
-// READ
+//* READ
 // user read user profile
 router.get('/', isAuth, async(req, res) => {
     try {
@@ -77,18 +68,33 @@ router.get('/', isAuth, async(req, res) => {
     }
 });
 
-//  /healthprofile (user can read medications, appt summary & billing)
-    router.get("/test", async(req, res) => {
-        try {
-            const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"])
-          
-            res.status(200).json(alldata)
-        } catch (error) {
-            res.status(500).json({ msg: error });
-          } 
-     })
+//  healthprofile (user can read medications, appt summary & billing)
+router.get("/test", async(req, res) => {
+    try {
+        const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"])
+        
+        res.status(200).json(alldata)
+    } catch (error) {
+        res.status(500).json({ msg: error });
+        } 
+    })
 
-// Update
+//admin read user profile
+router.get('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
+    const { id } = req.params;
+    try {
+        const adminUserProfileRead = await UserProfile.findById(id).populate(["loginInfo"]);
+        if (adminUserProfileRead === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+            res.status(200).json(adminUserProfileRead); //OK
+        }
+    } catch (error) {
+        res.status(500).json({msg: error});
+    }
+})
+
+//* UPDATE
 // user update user profile
 router.put('/:id', isAuth, async(req, res)=> {
     const { id } = req.params;
@@ -113,23 +119,21 @@ router.put('/:id', isAuth, async(req, res)=> {
 })
 
 // admin update user profile
-router.put('/admin/:id', isAuthAdmin, async(req, res) => {
-    const {id} = req.params
+router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
+    const { id } = req.params;
     try {
-        const adminupdate = await UserProfile.findByIdAndUpdate(id);
-        if (adminupdate === null) {
-            res.status(400).json({msg: "Wrong ID"})
+        const adminUpdate = await UserProfile.findByIdAndUpdate(id);
+        if (adminUpdate === null) {
+            res.status(400).json({msg: "Wrong ID"});
         } else {
-          
-            res.status(204).json(adminupdate)
-          
+            res.status(204).json(adminUpdate);
         }
     } catch (error) {
         res.status(500).json({msg: error})
     }
 })
 
-// DELETE
+//* DELETE
 // only admin can delete user profile
 router.delete('/admin/:id', isAuthAdmin, async(req, res)=> {
     const {id} = req.params
