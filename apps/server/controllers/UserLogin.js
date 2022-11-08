@@ -16,6 +16,8 @@ const UserLogin = require("../models/UserLogin");
 const UserProfile = require("../models/UserProfile.js");
 const session = require("express-session");
 const MongodbSession = require("connect-mongodb-session")(session);
+const isAuth = require("../middlewares/isAuth");
+const isAuthAdmin = require("../middlewares/isAuthAdmin");
 
 //* MIDDLEWARE
 
@@ -31,8 +33,7 @@ router.use(session({
     store: store
 }));
 
-const isAuth = require("../middlewares/isAuth");
-const isAuthAdmin = require("../middlewares/isAuthAdmin");
+
 
 //* SEED
 router.get("/seed", async(req, res) => {

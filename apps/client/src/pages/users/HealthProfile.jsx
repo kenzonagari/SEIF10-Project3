@@ -1,8 +1,81 @@
 import { Table } from 'react-bootstrap'
 import { useState } from "react"
+import { useEffect } from 'react'
 
 
 export default function HealthProfile ({userProfileInfo}) {
+
+    const [apptInfo, setApptInfo] = useState([]); 
+
+    useEffect(() => {
+        fetch('/api/apptsummary/')
+        .then((response) => response.json())
+        .then((data) => {
+            // console.log(data);
+            setApptInfo(data);
+        });
+    }, []);
+
+    let medPrescriptionElement = [];
+    let upcomingApptElement = [];
+    let pastApptElement = [];
+    let billingElement = [];
+
+    let medCounter = 1;
+    let upcomingApptCounter = 1;
+    let pastApptCounter = 1;
+
+    for(let element of apptInfo){
+        if(!element.apptCompleted){
+            upcomingApptElement.push(
+                <tr key={upcomingApptCounter}>
+                    <th scope="row">{upcomingApptCounter}</th>
+                    <td>{element.date.slice(0,10)}</td>
+                    <td>{element.time}</td>
+                    <td>{element.purpose}</td>
+                </tr>
+            );
+            upcomingApptCounter++;
+        } else {
+            pastApptElement.push(
+                <tr key={pastApptCounter}>
+                    <th scope="row">{pastApptCounter}</th>
+                    <td>{element.date.slice(0,10)}</td>
+                    <td>{element.time}</td>
+                    <td>{element.purpose}</td>
+                    <td>{element.summary}</td>
+                    <td>{element.medPrescription ? element.medPrescription : "NA"}</td>
+                    <td>{element.followUp? "Yes" : "No"}</td>
+                </tr>
+            );
+
+            billingElement.push(
+                <tr key={pastApptCounter}>
+                    <th scope="row">{pastApptCounter}</th>
+                    <td>{element.date.slice(0,10)}</td>
+                    <td>{element.billingInfo.toFixed(2)}</td>
+                </tr>
+            );
+
+            pastApptCounter++;
+
+            if(element.medPrescription){
+                medPrescriptionElement.push(
+                    <tr key={medCounter}>
+                        <th scope="row">{medCounter}</th>
+                        <td>{element.medPrescription.medicine}</td>
+                        <td>{element.medPrescription.dosage}</td>
+                        <td>{element.medPrescription.interval}</td>
+                        <td>{element.medPrescription.startDate}</td>
+                        <td>{element.medPrescription.duration}</td>
+                        <td>{element.medPrescription.instruction}</td>
+                    </tr>
+                );
+                medCounter++;
+            }
+        }
+    }
+
     return (
         <div className="card m-4 p-3" style={{ "width": "100rem", "height": "fit-content" }}>
 
@@ -13,34 +86,42 @@ export default function HealthProfile ({userProfileInfo}) {
                     <Table className="table table-borderless table-striped">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
+                                <th scope="col">No.</th>
                                 <th scope="col">Medication</th>
                                 <th scope="col">Dosage</th>
                                 <th scope="col">Interval</th>
                                 <th scope="col">Start Date</th>
                                 <th scope="col">Duration</th>
-                                <th scope="col">Notes</th>
+                                <th scope="col">Instruction</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Panadol</td>
-                                <td>1 tablet</td>
-                                <td>3 times a day</td>
-                                <td>05 August 2022</td>
-                                <td>10 August 2022</td>
-                                <td>Take after every meal</td>
-                            </tr>
+                            {medPrescriptionElement}
                         </tbody>
                     </Table>
                 </div>
                 <div className="card m-1 p-3" style={{ "width": "100%", "height": "fit-content" }}>
-                    <h3 className="m-3">Appointments</h3>
+                    <h3 className="m-3">Upcoming Appointments</h3>
                     <Table className="table table-borderless table-striped">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
+                                <th scope="col">No.</th>
+                                <th scope="col">Appointment Date</th>
+                                <th scope="col">Appointment Time</th>
+                                <th scope="col">Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {upcomingApptElement}
+                        </tbody>
+                    </Table>
+                </div>
+                <div className="card m-1 p-3" style={{ "width": "100%", "height": "fit-content" }}>
+                    <h3 className="m-3">Past Appointments</h3>
+                    <Table className="table table-borderless table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">No.</th>
                                 <th scope="col">Appointment Date</th>
                                 <th scope="col">Appointment Time</th>
                                 <th scope="col">Purpose</th>
@@ -50,43 +131,22 @@ export default function HealthProfile ({userProfileInfo}) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>05 August 2022</td>
-                                <td>2 PM</td>
-                                <td>General checkup</td>
-                                <td>A mild case of flu</td>
-                                <td>(reference medicine schema)</td>
-                                <td>No</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>05 August 2022</td>
-                                <td>2 PM</td>
-                                <td>General checkup</td>
-                                <td>A mild case of flu</td>
-                                <td>(reference medicine schema)</td>
-                                <td>No</td>
-                            </tr>
+                            {pastApptElement}
                         </tbody>
                     </Table>
                 </div>
                 <div className="card m-1 p-3" style={{ "width": "100%", "height": "fit-content" }}>
-                    <h3 className="m-3">Billing</h3>
+                    <h3 className="m-3">Billing History</h3>
                     <Table className="table table-borderless table-striped">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
+                                <th scope="col">No.</th>
                                 <th scope="col">Appointment Date</th>
                                 <th scope="col">Billing (in SGD)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>05 August 2022</td>
-                                <td>50.00</td>
-                            </tr>
+                            {billingElement}
                         </tbody>
                     </Table>
                 </div>

@@ -27,15 +27,15 @@ router.use(session({
 router.get("/seed", async(req, res)=> {
    // await ApptSummary.deleteMany({})
     const apptsummary = await ApptSummary.insertMany([{
-       loginInfo: "63645caec6c9e5bada7368a2",
+        loginInfo: "63645caec6c9e5bada7368a2",
         medPrescription: "636465644769e65dd2d045e1",
-    date: "1990/12/05",
-    time: "10.00",
-    purpose: "Follow-Up",
-    summary: "Vaccination",
-    prescriptionInfo: "NA",
-    billingInfo: 50
-    }])
+        date: "1990/12/05",
+        time: "10.00",
+        purpose: "Follow-Up",
+        summary: "Vaccination",
+        billingInfo: 50,
+        
+    }]);
     res.json(apptsummary)
         
 })
@@ -43,16 +43,14 @@ router.get("/seed", async(req, res)=> {
 //* testing
 router.get("/test", async(req, res)=> {
     // await ApptSummary.deleteMany({})
-     const apptsummary = await ApptSummary.insertMany([{
-         
-     date: "1990/12/15",
-     time: "9.00",
-     purpose: "General Check-Up",
-     summary: "Vaccination",
-     prescriptionInfo: "NA",
-     billingInfo: 50
-     }])
-     res.json(apptsummary)
+    const apptsummary = await ApptSummary.insertMany([{
+        date: "1990/12/15",
+        time: "9.00",
+        purpose: "General Check-Up",
+        summary: "Vaccination",
+        billingInfo: 50
+    }])
+    res.json(apptsummary)
  })
 
  // admin can read selected user's everything
@@ -75,7 +73,8 @@ router.get("/test", async(req, res)=> {
     } catch (error) {
         res.status(500).json({ msg: error });
       } 
- })
+ });
+
 // ROUTES
 // CREATE
 router.post('/', isAuth, async(req, res)=> {
@@ -88,16 +87,16 @@ router.post('/', isAuth, async(req, res)=> {
             time: time,
             purpose: purpose,
             summary: "NA",
-            prescriptionInfo: "NA",
             billingInfo: 0
         });
-        res.status(200).json(req.body);
+        res.status(200).json({msg: "Booking successful"});
     } catch (error) {
-        res.status(500).json({msg: "Server Error"});
+        res.status(500).json({msg: "Server error"});
     }
-})
-// check is the date available if yes -> can book, if no -> another date
-router.get("/checkdate", async(req, res) => {
+});
+
+// check is the date available if yes -> can book
+router.get("/checkdate", isAuth, async(req, res) => {
     try {
         const checkdate = await ApptSummary.find({}, {date:1, time:1})
       console.log(checkdate)
@@ -106,17 +105,16 @@ router.get("/checkdate", async(req, res) => {
         res.status(500).json({ msg: error });
       } 
  })
+
 // READ
-
-router.get('/', async (req, res)=> {
+router.get('/', isAuth, async (req, res)=> {
     try {
-        const users = await ApptSummary.find().exec() //need google
-        res.status(200).json(users)
+        const userApptHistory = await ApptSummary.find({ loginInfo: req.session.user._id }).exec();
+        res.status(200).json(userApptHistory);
     } catch (error) {
-        res.status(500).json({error})
+        res.status(500).json({msg: error});
     }
-})
-
+});
 
 // Update
 router.put('/:id', async(req, res)=> {
@@ -124,7 +122,7 @@ router.put('/:id', async(req, res)=> {
     try {
         const updateuser = await ApptSummary.findByIdAndUpdate(id);
         if (updateuser === null) {
-            res.status(400).json({msg: "Wrond ID"})
+            res.status(400).json({msg: "Wrong ID"})
         } else {
             res.status(204).json(updateuser)
         }
@@ -140,7 +138,7 @@ router.put('/:id', async(req, res)=> {
         try {
             const deleteuser = await ApptSummary.findByIdAndDelete(id);
             if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
+                res.status(400).json({msg: "Wrong ID"})
             } else {
                 res.status(204).json(deleteuser)
             }
@@ -150,19 +148,15 @@ router.put('/:id', async(req, res)=> {
         }
         })
     // admin delete selected user's everything
-    router.delete('/admin/:id', async(req, res)=> {
-        const {id} = req.params
+    router.get("/admin/:id", async(req, res) => {
         try {
-            const deleteuser = await ApptSummary.findByIdAndDelete(id);
-            if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
-            } else {
-                res.status(204).json(deleteuser)
-            }
-        
+            const selecteduser = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
+            const deleteuser = await selecteduser.update({_id: id}, { $unset: "purpose" })
+            res.status(200).json(deleteuser)
         } catch (error) {
-            res.status(500).json({msg: error})
-        }
-        })
+            res.status(500).json({ msg: error });
+          } 
+     })
+    
     // EXPORT
 module.exports = router;
