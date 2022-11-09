@@ -76,7 +76,7 @@ router.put('/:id', async(req, res)=> {
     try {
         const updateuser = await MedPrescription.findByIdAndUpdate(id);
         if (updateuser === null) {
-            res.status(400).json({msg: "Wrond ID"})
+            res.status(400).json({msg: "Wrong ID"})
         } else {
             res.status(204).json(updateuser)
         }
@@ -91,7 +91,7 @@ router.put('/:id', async(req, res)=> {
         try {
             const deleteuser = await MedPrescription.findByIdAndDelete(id);
             if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
+                res.status(400).json({msg: "Wrong ID"})
             } else {
                 res.status(204).json(deleteuser)
             }

@@ -191,7 +191,6 @@ router.get('/signout', async(req, res) => {
         } else {
             return res.status(200).json({msg: "Sign out successful"});
         }
-        return res.status(200).json({msg: "Sign out successful"});
     } catch (error) {
         return res.status(500).json({msg: error});
     }
@@ -200,7 +199,11 @@ router.get('/signout', async(req, res) => {
 router.get('/', isAuth, async(req, res) => {
     try {
         const userLoginInfo = await UserLogin.find({ "_id" : req.session.user._id }).exec();
+        if (userLoginInfo === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
         res.status(200).json(userLoginInfo);
+        }
     } catch (error) {
         res.status(500).json({msg: error});
     }
@@ -212,13 +215,13 @@ router.put('/:id', async(req, res)=> {
     try {
         const updateuser = await UserLogin.findByIdAndUpdate(id);
         if (updateuser === null) {
-            res.status(400).json({msg: "Wrong ID"})
+            res.status(400).json({msg: "Wrong ID"});
         } else {
-            res.status(204).json(updateuser)
+            res.status(204).json(updateuser);
         }
     
     } catch (error){
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
     })
 
@@ -228,13 +231,13 @@ router.put('/:id', async(req, res)=> {
         try {
             const deleteuser = await UserLogin.findByIdAndDelete(id);
             if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"})
+                res.status(400).json({msg: "Wrond ID"});
             } else {
-                res.status(204).json(deleteuser)
+                res.status(204).json(deleteuser);
             }
         
         } catch (error){
-            res.status(500).json({msg: error})
+            res.status(500).json({msg: error});
         }
         })
     

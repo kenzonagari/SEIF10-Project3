@@ -37,7 +37,7 @@ router.get("/seed", async(req, res) => {
             pastIllnesses: "NA",
             loginInfo: "6361f7ff07e2ef96c36a06f9"
     }]);
-    res.json(userprofile)
+    res.json(userprofile);
 })
 
 
@@ -53,28 +53,20 @@ router.post('/', isAuth, async(req, res)=> {
         const createUserProfile = await UserProfile.create(req.body);
         res.status(200).json({msg: "Redirecting to /home"});
     } catch (error) {
-        res.status(500).json({msg: "server error"});
+        res.status(500).json({msg: error});
     }
 });
-
-
-
-
-router.post('/logout', (req, res)=> {
-    req.session.isAuth = false
-    req.session.destroy((err)=> {
-        if(err) throw err;
-        res.json({msg: "Logged Out!"})
-    })
-})
-
 
 //* READ
 // user read user profile
 router.get('/', isAuth, async(req, res) => {
     try {
         const userProfileInfo = await UserProfile.find({ "loginInfo" : req.session.user._id }).populate("loginInfo");
+        if (userProfileInfo === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
         res.status(200).json(userProfileInfo);
+        }
     } catch (error) {
         res.status(500).json({msg: error});
     }
@@ -83,9 +75,12 @@ router.get('/', isAuth, async(req, res) => {
 //  healthprofile (user can read medications, appt summary & billing)
 router.get("/test", async(req, res) => {
     try {
-        const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"])
-        
-        res.status(200).json(alldata)
+        const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"]);
+        if (alldata === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+        res.status(200).json(alldata);
+        }
     } catch (error) {
         res.status(500).json({ msg: error });
         } 
@@ -133,8 +128,12 @@ router.put('/:id', isAuth, async(req, res)=> {
 // admin update user profile
 router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     const { id } = req.params;
+    const {medPrescription, apptCompleted} = req.body;
     try {
-        const adminUpdate = await UserProfile.findByIdAndUpdate(id);
+        const adminUpdate = await UserProfile.findByIdAndUpdate(id, {
+            medPrescription: medPrescription,
+            apptCompleted: apptCompleted
+        });
         if (adminUpdate === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
@@ -151,10 +150,10 @@ router.delete('/admin/:id', isAuthAdmin, async(req, res)=> {
     const {id} = req.params
     try {
         const deleteuser = await UserProfile.findByIdAndDelete(id);
-        if (updateuser === null) {
-            res.status(400).json({msg: "Wrond ID"})
+        if (deleteuser === null) {
+            res.status(400).json({msg: "Wrong ID"});
         } else {
-            res.status(204).json(deleteuser)
+            res.status(204).json(deleteuser);
         }
     
     } catch (error){
