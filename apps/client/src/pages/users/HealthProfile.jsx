@@ -44,7 +44,7 @@ export default function HealthProfile ({userProfileInfo}) {
                     <td>{element.time}</td>
                     <td>{element.purpose}</td>
                     <td>{element.summary}</td>
-                    <td>{element.medPrescription ? element.medPrescription : "NA"}</td>
+                    <td>{element.medPrescription ? `${element.medPrescription.medicine} ${element.medPrescription.dosage}` : "NA"}</td>
                     <td>{element.followUp? "Yes" : "No"}</td>
                 </tr>
             );
@@ -65,8 +65,7 @@ export default function HealthProfile ({userProfileInfo}) {
                         <th scope="row">{medCounter}</th>
                         <td>{element.medPrescription.medicine}</td>
                         <td>{element.medPrescription.dosage}</td>
-                        <td>{element.medPrescription.interval}</td>
-                        <td>{element.medPrescription.startDate}</td>
+                        <td>{element.medPrescription.startDate.slice(0,10)}</td>
                         <td>{element.medPrescription.duration}</td>
                         <td>{element.medPrescription.instruction}</td>
                     </tr>
@@ -89,7 +88,6 @@ export default function HealthProfile ({userProfileInfo}) {
                                 <th scope="col">No.</th>
                                 <th scope="col">Medication</th>
                                 <th scope="col">Dosage</th>
-                                <th scope="col">Interval</th>
                                 <th scope="col">Start Date</th>
                                 <th scope="col">Duration</th>
                                 <th scope="col">Instruction</th>

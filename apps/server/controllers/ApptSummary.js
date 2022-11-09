@@ -120,19 +120,20 @@ router.get("/checkdate", isAuth, async(req, res) => {
 // READ
 router.get('/', isAuth, async (req, res)=> {
     try {
-        const userApptHistory = await ApptSummary.find({ loginInfo: req.session.user._id }).exec();
+        const userApptHistory = await ApptSummary.find({ loginInfo: req.session.user._id }).populate(["loginInfo", "medPrescription"]);
         if (userApptHistory === null) {
-            res.status(400).json({msg: "Wrong ID"});
+        res.status(400).json({msg: "Wrong ID"});
         } else {
-        res.status(200).json(userApptHistory);
+            res.status(200).json(userApptHistory);
         }
+    
     } catch (error) {
         res.status(500).json({msg: error});
     }
 });
 
 //Read all
-router.get('/all', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
+router.get('/all', isAuthAdmin, async (req, res)=> {
     try {
         const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
         if (userApptHistory === null) {
@@ -146,7 +147,7 @@ router.get('/all', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
 });
 
 //Read one (for admin)
-router.get('/:id', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
+router.get('/:id', isAuthAdmin, async (req, res)=> {
     const {id} = req.params;
     try {
         const userApptHistory = await ApptSummary.findById(id).populate(["loginInfo", "medPrescription"]);
@@ -162,18 +163,25 @@ router.get('/:id', isAuthAdmin, async (req, res)=> { //need isAuthAdmin later
 });
 
 // Update
-router.put('/:id', async(req, res)=> {
-    const {id} = req.params
+router.put('/:id', isAuthAdmin, async(req, res)=> {
+    const {id} = req.params;
+    const {purpose, billingInfo, summary, followUp, medPrescription} = req.body;
     try {
-        const updateuser = await ApptSummary.findByIdAndUpdate(id);
-        if (updateuser === null) {
-            res.status(400).json({msg: "Wrong ID"})
+        const updateApptHistory = await ApptSummary.findByIdAndUpdate(id, {
+            purpose: purpose,
+            summary: summary,
+            billingInfo: billingInfo,
+            followUp: followUp,
+            medPrescription: medPrescription,
+            apptCompleted: true
+        });
+        if (updateApptHistory === null) {
+            res.status(400).json({msg: "Wrong ID"});
         } else {
-            res.status(204).json(updateuser)
+            res.status(200).json({msg: "Update successful"});
         }
-    
     } catch (error){
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
     })
 
