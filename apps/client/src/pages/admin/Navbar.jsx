@@ -15,14 +15,26 @@ export default function NavigationBar ({userProfileInfo}) {
                 <ul className="nav nav-pills flex-column mb-auto">
                     <div className='mb-3'>
                         <li className="nav-item">
-                            <p><b>Username</b></p>
-                            <p>{userProfileInfo?.loginInfo?.username}</p>
+                            <p><b>Full name</b></p>
+                            <p>{userProfileInfo?.loginInfo?.firstname} {userProfileInfo?.loginInfo?.lastname}</p>
                         </li>
                     </div>
                     <div className='mb-3'>
                         <li className="nav-item">
-                            <p><b>Full name</b></p>
-                            <p>{userProfileInfo?.loginInfo?.firstname} {userProfileInfo?.loginInfo?.lastname}</p>
+                            <p><b>Date of Birth</b></p>
+                            <p>{userProfileInfo?.dateOfBirth?.slice(0,10)}</p>
+                        </li>
+                    </div>
+                    <div className='mb-3'>
+                        <li className="nav-item">
+                            <p><b>Medication Allergies</b></p>
+                            <p>{userProfileInfo?.medAllergies}</p>
+                        </li>
+                    </div>
+                    <div className='mb-3'>
+                        <li className="nav-item">
+                            <p><b>Past Illnesses</b></p>
+                            <p>{userProfileInfo?.pastIllnesses}</p>
                         </li>
                     </div>
                     <div className='mb-3'>
@@ -35,12 +47,6 @@ export default function NavigationBar ({userProfileInfo}) {
                         <li className="nav-item">
                             <p><b>Email Address</b></p>
                             <p>{userProfileInfo?.loginInfo?.email}</p>
-                        </li>
-                    </div>
-                    <div className='mb-3'>
-                        <li className="nav-item">
-                            <p><b>Date of Birth</b></p>
-                            <p>{userProfileInfo?.dateOfBirth?.slice(0,10)}</p>
                         </li>
                     </div>
                     <div className='mb-3'>

@@ -40,9 +40,6 @@ router.get("/seed", async(req, res) => {
     res.json(userprofile);
 })
 
-
-
-
 // ROUTES
 //* CREATE
 // user create profile
@@ -128,19 +125,26 @@ router.put('/:id', isAuth, async(req, res)=> {
 // admin update user profile
 router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     const { id } = req.params;
-    const {medPrescription, apptCompleted} = req.body;
+    const {dateOfBirth, sex, mobile, ic, medAllergies, pastIllnesses} = req.body;
+
     try {
-        const adminUpdate = await UserProfile.findByIdAndUpdate(id, {
-            medPrescription: medPrescription,
-            apptCompleted: apptCompleted
+        const userProfileUpdate = await UserProfile.findByIdAndUpdate(id, {
+            dateOfBirth: dateOfBirth,
+            sex: sex,
+            mobile: mobile,
+            ic: ic,
+            medAllergies: medAllergies,
+            pastIllnesses: pastIllnesses
         });
-        if (adminUpdate === null) {
+
+        if (userProfileUpdate === null) {
+
             res.status(400).json({msg: "Wrong ID"});
         } else {
-            res.status(204).json(adminUpdate);
+            res.status(200).json({msg: "Redirecting to /admin/home"});
         }
     } catch (error) {
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: "input error"})
     }
 })
 

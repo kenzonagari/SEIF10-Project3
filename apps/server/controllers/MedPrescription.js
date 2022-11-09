@@ -1,7 +1,26 @@
+//* Mongoose dependencies
+const mongoose = require("mongoose");
+const MONGO_URI = process.env.MONGO_URI;
+
 //* DEPENDENCIES
 const express = require("express");
 const router = express.Router();
 const MedPrescription = require("../models/MedPrescription.js");
+const isAuthAdmin = require("../middlewares/isAuthAdmin.js");
+const session = require("express-session");
+const MongodbSession = require("connect-mongodb-session")(session);
+
+const store = new MongodbSession({
+    uri: MONGO_URI,
+    collection: "mySessions"
+});
+
+router.use(session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    store: store
+}));
 
 //* SEED
 router.get("/seed", async(req, res) => {
@@ -26,7 +45,6 @@ router.get("/test", async(req, res) => {
     duration: "5 days",
     medicine: "panadols",
     dosage: "2 times per day",
-    interval: "1 week",
     instruction: "after meal"
     }])
     res.json(medprescription)
@@ -40,20 +58,26 @@ router.get("/test2", async(req, res) => {
     duration: "10 days",
     medicine: "panadols",
     dosage: "2 times per day",
-    interval: "1 week",
     instruction: "after meal"
     }])
     res.json(medprescription)
 })
 
 // ROUTES
-// CREATE
-router.post('/', async(req, res)=> {
+// CREATE (for admin)
+router.post('/admin', isAuthAdmin, async(req, res)=> { 
+    const {medicine, dosage, startDate, duration, instruction} = req.body;
     try {
-        const createprofile = await MedPrescription.create(req.body)
-        res.status(200).json(createprofile)
+        const createMedPrescripton = await MedPrescription.create({
+            medicine: medicine,
+            dosage: dosage,
+            startDate: startDate,
+            duration: duration,
+            instruction: instruction
+        });
+        res.status(200).json(createMedPrescripton);
     } catch (error) {
-        res.status(500).json({msg: "Server Error"})
+        res.status(500).json({msg: "Server Error"});
     }
 })
 
@@ -62,29 +86,37 @@ router.post('/', async(req, res)=> {
 router.get('/', async (req, res)=> {
     try {
         const users = await MedPrescription.find().exec() //need google
-        res.status(200).json(users)
+        res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({error})
+        res.status(500).json({error});
     }
-})
+});
 
-
-
-// Update
-router.put('/:id', async(req, res)=> {
-    const {id} = req.params
+// UPDATE
+router.put('/:id', isAuthAdmin, async(req, res)=> {
+    const { id } = req.params;
+    const {medicine, dosage, startDate, duration, instruction} = req.body;
     try {
-        const updateuser = await MedPrescription.findByIdAndUpdate(id);
-        if (updateuser === null) {
-            res.status(400).json({msg: "Wrong ID"})
+
+        const updateMedPrescription = await MedPrescription.findByIdAndUpdate(id, {
+            medicine: medicine,
+            dosage: dosage,
+            startDate: startDate,
+            duration: duration,
+            instruction: instruction
+        });
+        if (updateMedPrescription === null) {
+            res.status(400).json({msg: "Wrong ID"});
+
         } else {
-            res.status(204).json(updateuser)
+            res.status(200).json(updateMedPrescription);
         }
     
     } catch (error){
         res.status(500).json({msg: error})
     }
-    })
+});
+
 // DELETE
     router.delete('/:id', async(req, res)=> {
         const {id} = req.params
