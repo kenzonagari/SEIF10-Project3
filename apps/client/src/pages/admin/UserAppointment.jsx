@@ -15,7 +15,6 @@ export default function UserAppointment () {
         fetch(`/api/apptsummary/${apptId}`)
             .then((response) => response.json())
             .then((data) => {
-                // console.log(data["userApptHistory"], data["userProfile"][0]);
                 setApptInfoData(data["userApptHistory"]);
                 setuserProfileInfo(data["userProfile"][0]);
             });
@@ -27,6 +26,22 @@ export default function UserAppointment () {
 
     const handleDeleteAppt = () => {
         console.log("deletin...");
+        //DELETE
+        fetch(`/api/apptsummary/${apptId}`,     {   method: "DELETE", 
+                                                    headers: {
+                                                        "Content-type": "application/json" //* vvvvv important, otherwise server receives empty object
+                                                    }
+                                                })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if(data.msg === "Redirecting to /admin/home"){
+                    return navigate(`/admin/home`);
+                } else {
+                    return;
+                }
+            });
     }
 
     const medLine = `${apptInfoData?.medPrescription?.medicine} | ${apptInfoData?.medPrescription?.dosage} | ${apptInfoData?.medPrescription?.instruction}`;
@@ -107,8 +122,8 @@ export default function UserAppointment () {
                     Are you sure? This process cannot be undone.
                 </div>
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-danger" onClick={handleDeleteAppt}>Delete</button>
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" className="btn btn-danger" onClick={handleDeleteAppt} data-bs-dismiss="modal">Delete</button>
                 </div>
                 </div>
             </div>
