@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
+import CoverPage from './pages/CoverPage'
 import Footer from './pages/Footer'
 
 import CreateProfile from './pages/users/CreateProfile'
@@ -20,6 +20,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+        <Route path="/" element={<CoverPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signout" element={<Signout />} />

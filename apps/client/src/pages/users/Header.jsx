@@ -10,9 +10,7 @@ export default function HeaderFunction ({userProfileInfo}) {
         <Navbar className="navbar-expand-lg bg-secondary d-flex flex-wrap justify-content-between align-items-center" style={{"--bs-bg-opacity": .1}}>
             <div className="container-fluid">
                 <a className="navbar-brand h1 mx-4 my-0" href="/home">
-                    <h1>
-                        HealthcarePal
-                    </h1>
+                    <p className="fw-bold text-center" style={{fontSize: "2em", color:"#FD6666"}}>HealthcarePal</p>
                 </a>
                 <div className='dropdown'>
                     <ul className="navbar-nav">
