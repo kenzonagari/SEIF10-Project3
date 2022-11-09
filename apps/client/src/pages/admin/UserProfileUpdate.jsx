@@ -197,9 +197,6 @@ export default function UserProfileUpdate () {
                         <Button variant="primary" type="submit" disabled={disableButton}>
                             Update Profile
                         </Button>
-                        <Button variant="danger" type="button" disabled={disableButton}>
-                            Delete Profile
-                        </Button>
                     </div>
 
                 </Form>
