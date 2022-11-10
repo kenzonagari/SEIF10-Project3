@@ -58,10 +58,14 @@ router.get("/test", async(req, res)=> {
  router.get("/test2/:id", async(req, res) => {
     try {
         const alldata = await ApptSummary.find({ "loginInfo" : req.session._id }).populate(["loginInfo", "medPrescription"])
-      
-        res.status(200).json(alldata)
+        if (alldata === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+            res.status(200).json(alldata)
+        }  
+        
     } catch (error) {
-        res.status(500).json({ msg: "error" });
+        res.status(500).json({ msg: error });
       } 
  })
 
@@ -69,7 +73,13 @@ router.get("/test", async(req, res)=> {
  router.get("/test2", async(req, res) => {
     try {
         const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
+
+        if (alldata === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+
         res.status(200).json(alldata)
+        }
     } catch (error) {
         res.status(500).json({ msg: error });
       } 
@@ -91,7 +101,7 @@ router.post('/', isAuth, async(req, res)=> {
         });
         res.status(200).json({msg: "Booking successful"});
     } catch (error) {
-        res.status(500).json({msg: "Server error"});
+        res.status(500).json({msg: error});
     }
 });
 
@@ -99,7 +109,12 @@ router.post('/', isAuth, async(req, res)=> {
 router.get("/checkdate", isAuth, async(req, res) => {
     try {
         const checkdate = await ApptSummary.find({}, {date:1, time:1})
-        res.status(200).json(checkdate);
+
+        if (checkdate === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+        res.status(200).json(checkdate)
+        }
     } catch (error) {
         res.status(500).json({ msg: error });
       } 
@@ -109,7 +124,12 @@ router.get("/checkdate", isAuth, async(req, res) => {
 router.get('/', isAuth, async (req, res)=> {
     try {
         const userApptHistory = await ApptSummary.find({ loginInfo: req.session.user._id }).populate(["loginInfo", "medPrescription"]);
-        res.status(200).json(userApptHistory);
+        if (userApptHistory === null) {
+        res.status(400).json({msg: "Wrong ID"});
+        } else {
+            res.status(200).json(userApptHistory);
+        }
+    
     } catch (error) {
         res.status(500).json({msg: error});
     }
@@ -119,9 +139,13 @@ router.get('/', isAuth, async (req, res)=> {
 router.get('/all', isAuthAdmin, async (req, res)=> {
     try {
         const userApptHistory = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"]);
+        if (userApptHistory === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
         res.status(200).json(userApptHistory);
+        }
     } catch (error) {
-        res.status(500).json({msg: "server error"});
+        res.status(500).json({msg: error});
     }
 });
 
@@ -131,9 +155,13 @@ router.get('/:id', isAuthAdmin, async (req, res)=> {
     try {
         const userApptHistory = await ApptSummary.findById(id).populate(["loginInfo", "medPrescription"]);
         const userProfile = await UserProfile.find({ loginInfo: userApptHistory.loginInfo._id }).populate(["loginInfo"]);
+        if (userApptHistory === null || userProfile === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
         res.status(200).json({userApptHistory, userProfile});
+        }
     } catch (error) {
-        res.status(500).json({msg: "server error"});
+        res.status(500).json({msg: error});
     }
 });
 
@@ -157,6 +185,29 @@ router.put('/:id', isAuthAdmin, async(req, res)=> {
         }
     } catch (error){
         res.status(500).json({msg: error});
+    }
+})
+
+// user update profile
+router.put('/:id', isAuth, async(req, res)=> {
+    const { id } = req.params;
+    const { email, mobile } = req.body;
+
+    try {
+        const updateUserProfile = await UserProfile.findByIdAndUpdate(id, {
+            mobile: mobile
+        });
+        const updateUserLogin = await UserLogin.findByIdAndUpdate(req.session.user._id, {
+            email: email
+        });
+
+        if (updateUserProfile === null || updateUserLogin === null) {
+            res.status(400).json({msg: "User ID Not Found"}); //Bad Request
+        } else {
+            res.status(200).json(updateUserProfile); //OK
+        }
+    } catch (error){
+        res.status(500).json({ msg: "server error" });
     }
 })
 
