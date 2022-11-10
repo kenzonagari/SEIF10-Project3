@@ -82,7 +82,7 @@ export default function Signup () {
     return(
         <>
             <p className="fw-bold text-center my-4" style={{fontSize: "3em", color:"#FD6666"}}>HealthcarePal</p>
-            <div className="card m-4 p-4 mx-auto" style={{ width: "35rem" }}>
+            <div className="card m-4 p-4 mx-auto mb-5" style={{ width: "35rem" }}>
                 <div className="mb-3 text-center">
                     <h3>Sign Up</h3>
                 </div>

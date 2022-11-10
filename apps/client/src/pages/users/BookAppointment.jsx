@@ -199,8 +199,8 @@ export default function BookAppointment () {
                         </Form.Text>
                     </div>
                     </div>
-                    <div className="mb-3 text-center">
-                        <Button variant="primary" type="submit" disabled={disableButton}>
+                    <div className="mb-3 mt-5 text-center">
+                        <Button variant="primary" type="submit" className="p-3" disabled={disableButton}>
                             Book appointment
                         </Button>
                     </div>

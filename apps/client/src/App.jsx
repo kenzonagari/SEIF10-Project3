@@ -17,7 +17,7 @@ import UserProfileUpdate from './pages/admin/UserProfileUpdate'
 function App() {
 
   return (
-    <div className="App">
+    <div className="App d-flex flex-column justify-content-between" style={{minHeight: "100vh"}}>
       <BrowserRouter>
         <Routes>
         <Route path="/" element={<CoverPage />} />

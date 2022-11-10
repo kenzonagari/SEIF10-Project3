@@ -17,7 +17,7 @@ export default function HeaderFunction ({userProfileInfo}) {
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle navbar-brand h1 mx-4 my-0 d-flex flex-row align-items-center" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <h5>Hi, {userProfileInfo?.loginInfo?.username}!</h5>
-                            <div className="rounded-circle text-white fs-6 mx-2 text-center" style={{"width": "40px", "height": "40px", "lineHeight":"37.5px", "background":"#d63384"}}>
+                            <div className="rounded-circle text-white fs-6 mx-2 text-center" style={{"width": "40px", "height": "40px", "lineHeight":"37.5px", "background":"#FD6666"}}>
                             {initial}
                             </div>
                             </a>
