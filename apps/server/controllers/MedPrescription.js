@@ -72,7 +72,6 @@ router.post('/admin', isAuthAdmin, async(req, res)=> {
     if (medicine.length === 0 || dosage.length === 0 || startDate.length === 0 || duration.length === 0 || instruction.length === 0) {
         return res.status(401).json({msg: "Please provide all the details"}); 
     }
-   const noBackDate = await MedPrescription
 
     try {
         const createMedPrescripton = await MedPrescription.create({
