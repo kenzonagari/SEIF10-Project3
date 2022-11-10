@@ -15,6 +15,9 @@ export default function UserProfileUpdate () {
         fetch(`/api/userprofile/admin/${userProfileId}`)
             .then((response) => response.json())
             .then((data) => {
+                if(data.msg === "Not Authorized!"){
+                    return navigate("/");
+                }
                 setUserProfileInfo(data);
             });
     }, [])

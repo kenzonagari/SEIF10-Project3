@@ -22,6 +22,9 @@ export default function BookAppointment () {
         fetch('/api/apptsummary/checkdate')
         .then((response) => response.json())
         .then((data) => {
+            if(data.msg === "Not Authorized!"){
+                navigate("/");
+            }
             setUnavailableDate(data);
         });
     }, [])

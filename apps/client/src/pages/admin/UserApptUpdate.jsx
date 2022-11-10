@@ -18,6 +18,9 @@ export default function UserApptUpdate () {
             .then((response) => response.json())
             .then((data) => {
                 // console.log(data["userApptHistory"], data["userProfile"][0]);
+                if(data.msg === "Not Authorized!"){
+                    return navigate("/");
+                }
                 setApptInfoData(data["userApptHistory"]);
                 setuserProfileInfo(data["userProfile"][0]);
             });
