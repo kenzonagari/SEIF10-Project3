@@ -106,9 +106,9 @@ export default function Signup () {
                     <div className="mb-3 col">
                         <Form.Label>Username*</Form.Label>
                         <br></br>
-                        <Form.Text className="text-muted">
+                        <p className="form-text text-muted">
                             Username must have at least 3 characters
-                        </Form.Text>
+                        </p>
                         <Form.Control type="text" id="username" name="username" placeholder="Enter username" required/>
                         {error === warningText.usernameTooShort ? warningPopup : ""}
                         {error === warningText.usernameTaken ? warningPopup : ""}
@@ -122,7 +122,13 @@ export default function Signup () {
 
                     <div className="mb-3">
                         <Form.Label>Password*</Form.Label>
-                        <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
+                        <br></br>
+                        <p className="form-text text-muted lh-sm">
+                            Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters
+                        </p>
+                        <Form.Control type="password" id="password" name="password" placeholder="Enter password" 
+                        className="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                        required/>
                     </div>
 
                     <div className="mb-3">

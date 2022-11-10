@@ -89,7 +89,6 @@ router.get("/test", async(req, res)=> {
 // CREATE
 router.post('/', isAuth, async(req, res)=> {
     const {purpose, date, time} = req.body;
-    console.log(req.body, req.session.user._id);
     try {
         const createAppt = await ApptSummary.create({
             loginInfo: req.session.user._id,
@@ -108,12 +107,11 @@ router.post('/', isAuth, async(req, res)=> {
 // check is the date available if yes -> can book
 router.get("/checkdate", isAuth, async(req, res) => {
     try {
-        const checkdate = await ApptSummary.find({}, {date:1, time:1})
-
+        const checkdate = await ApptSummary.find({}, {date:1, time:1});
         if (checkdate === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
-        res.status(200).json(checkdate)
+            res.status(200).json(checkdate);
         }
     } catch (error) {
         res.status(500).json({ msg: error });
@@ -129,7 +127,6 @@ router.get('/', isAuth, async (req, res)=> {
         } else {
             res.status(200).json(userApptHistory);
         }
-    
     } catch (error) {
         res.status(500).json({msg: error});
     }
@@ -142,7 +139,7 @@ router.get('/all', isAuthAdmin, async (req, res)=> {
         if (userApptHistory === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
-        res.status(200).json(userApptHistory);
+            res.status(200).json(userApptHistory);
         }
     } catch (error) {
         res.status(500).json({msg: error});
@@ -158,7 +155,7 @@ router.get('/:id', isAuthAdmin, async (req, res)=> {
         if (userApptHistory === null || userProfile === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
-        res.status(200).json({userApptHistory, userProfile});
+            res.status(200).json({userApptHistory, userProfile});
         }
     } catch (error) {
         res.status(500).json({msg: error});
@@ -186,7 +183,7 @@ router.put('/:id', isAuthAdmin, async(req, res)=> {
     } catch (error){
         res.status(500).json({msg: error});
     }
-})
+});
 
 // user update profile
 router.put('/:id', isAuth, async(req, res)=> {
@@ -209,7 +206,7 @@ router.put('/:id', isAuth, async(req, res)=> {
     } catch (error){
         res.status(500).json({ msg: "server error" });
     }
-})
+});
 
 // DELETE
 router.delete('/:id', isAuthAdmin, async(req, res)=> {

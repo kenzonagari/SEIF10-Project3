@@ -5,7 +5,6 @@ const isAuth = (req, res, next) => {
         if (req.session.isAuth){
             next();
         } else {
-            // res.json({ msg: "Not Authorized!" });
             res.status(401).json({ msg: "Not Authorized!" });
         }
     } catch (error) {

@@ -132,12 +132,12 @@ router.post('/signin', async(req, res) => {
             if(!user){
                 return res.status(401).json({msg: "Email not found"});
             }
-        }
+        };
 
         const passwordMatch = bcrypt.compareSync(password, user.password);
         if (passwordMatch === false) {
             return res.status(401).json({msg: "Incorrect password"});
-        }
+        };
 
         //check admin or user sign in
 
@@ -179,7 +179,7 @@ router.post('/signin', async(req, res) => {
     }
 });
 
-//* UPDATE
+//* READ
 //user sign-out
 router.get('/signout', async(req, res) => {
     try {
@@ -193,6 +193,7 @@ router.get('/signout', async(req, res) => {
         } else {
             return res.status(200).json({msg: "Sign out successful"});
         }
+        return res.status(200).json({msg: "Sign out successful"});
     } catch (error) {
         return res.status(500).json({msg: error});
     }
@@ -204,44 +205,28 @@ router.get('/', isAuth, async(req, res) => {
         if (userLoginInfo === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
-        res.status(200).json(userLoginInfo);
+            res.status(200).json(userLoginInfo);
         }
     } catch (error) {
         res.status(500).json({msg: error});
     }
 });
 
-//* Update
-router.put('/:id', async(req, res)=> {
-    const {id} = req.params
-    try {
-        const updateuser = await UserLogin.findByIdAndUpdate(id);
-        if (updateuser === null) {
-            res.status(400).json({msg: "Wrong ID"});
-        } else {
-            res.status(204).json(updateuser);
-        }
+// //* Update
+// router.put('/:id', async(req, res)=> {
+//     const {id} = req.params
+//     try {
+//         const updateuser = await UserLogin.findByIdAndUpdate(id);
+//         if (updateuser === null) {
+//             res.status(400).json({msg: "Wrong ID"});
+//         } else {
+//             res.status(204).json(updateuser);
+//         }
     
-    } catch (error){
-        res.status(500).json({msg: error});
-    }
-    })
-
-//* DELETE
-    router.delete('/:id', async(req, res)=> {
-        const {id} = req.params
-        try {
-            const deleteuser = await UserLogin.findByIdAndDelete(id);
-            if (updateuser === null) {
-                res.status(400).json({msg: "Wrond ID"});
-            } else {
-                res.status(204).json(deleteuser);
-            }
-        
-        } catch (error){
-            res.status(500).json({msg: error});
-        }
-        })
+//     } catch (error){
+//         res.status(500).json({msg: error});
+//     }
+// })
     
 // EXPORT
 module.exports = router;

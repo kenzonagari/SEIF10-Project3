@@ -63,7 +63,6 @@ export default function UserApptUpdate () {
                             return response.json();
                         })
                         .then((data) => {
-                            console.log(data)
                             if(data.msg === "Update successful"){
                                 setError("");
                                 return navigate(`/admin/userAppointment/${apptId}`);
