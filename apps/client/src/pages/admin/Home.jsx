@@ -14,6 +14,8 @@ export default function AdminHome () {
         .then((data) => {
             if(data.msg === "server error"){
                 return navigate("/signin");
+            } else if(data.msg === "Not Authorized!"){
+                return navigate("/");
             }
             data.sort((a,b) => {
                 if (a.date < b.date) {

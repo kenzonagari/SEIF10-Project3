@@ -144,6 +144,7 @@ router.post('/signin', async(req, res) => {
         if(user.role === "admin"){
 
             req.session.isAuthAdmin = true;
+            req.session.isAuth = false;
             req.session.user = {
                 _id: user._id,
                 username: user.username,
@@ -154,6 +155,7 @@ router.post('/signin', async(req, res) => {
         } else if(user.role === "user"){
 
             req.session.isAuth = true;
+            req.session.isAuthAdmin = false;
             req.session.user = {
                 _id: user._id,
                 username: user.username,

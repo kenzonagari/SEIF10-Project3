@@ -15,6 +15,9 @@ export default function UserProfileUpdate () {
         fetch(`/api/userprofile/admin/${userProfileId}`)
             .then((response) => response.json())
             .then((data) => {
+                if(data.msg === "Not Authorized!"){
+                    return navigate("/");
+                }
                 setUserProfileInfo(data);
             });
     }, [])
@@ -196,9 +199,6 @@ export default function UserProfileUpdate () {
                     <div className="mt-5 mb-3 text-center d-flex justify-content-around">
                         <Button variant="primary" type="submit" disabled={disableButton}>
                             Update Profile
-                        </Button>
-                        <Button variant="danger" type="button" disabled={disableButton}>
-                            Delete Profile
                         </Button>
                     </div>
 

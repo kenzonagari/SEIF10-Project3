@@ -74,35 +74,37 @@ export default function Signin () {
         </div>;
 
     return(
-        <div className="card m-4 p-4 mx-auto" style={{ width: "30rem" }}>
-
-            <div className="mb-3 text-center">
-                <h1>Sign In</h1>
-            </div>
-
-            <Form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <Form.Label>Email Address or Username*</Form.Label>
-                    <Form.Control type="text" id="email" name="email" placeholder="Enter email address or username" required/>
-                </div>
-
-                <div className="mb-3">
-                    <Form.Label>Password*</Form.Label>
-                    <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
-                </div>
-
-                <div className="mb-3">
-                    {error === warningText.emailNotFound ? warningPopup : ""}
-                    {error === warningText.incorrectPassword ? warningPopup : ""}
-                </div>
-
+        <div>
+            <p className="fw-bold text-center my-4" style={{fontSize: "3em", color:"#FD6666"}}>HealthcarePal</p>
+            <div className="card m-4 p-4 mx-auto" style={{ width: "30rem" }}>
                 <div className="mb-3 text-center">
-                    <Button variant="primary" type="submit" disabled={disableButton}>
-                        Sign In
-                    </Button>
+                    <h3>Sign In</h3>
                 </div>
-            </Form>
-            <p className="mb-3 text-center">Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
+
+                <Form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <Form.Label>Email Address or Username*</Form.Label>
+                        <Form.Control type="text" id="email" name="email" placeholder="Enter email address or username" required/>
+                    </div>
+
+                    <div className="mb-3">
+                        <Form.Label>Password*</Form.Label>
+                        <Form.Control type="password" id="password" name="password" placeholder="Enter password" required/>
+                    </div>
+
+                    <div className="mb-3">
+                        {error === warningText.emailNotFound ? warningPopup : ""}
+                        {error === warningText.incorrectPassword ? warningPopup : ""}
+                    </div>
+
+                    <div className="mb-3 text-center">
+                        <Button variant="primary" type="submit" disabled={disableButton}>
+                            Sign In
+                        </Button>
+                    </div>
+                </Form>
+                <p className="mb-3 text-center">Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
+            </div>
         </div>
     )
 }

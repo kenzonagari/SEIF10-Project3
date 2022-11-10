@@ -73,9 +73,11 @@ router.get("/test", async(req, res)=> {
  router.get("/test2", async(req, res) => {
     try {
         const alldata = await ApptSummary.find({}).populate(["loginInfo", "medPrescription"])
+
         if (alldata === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
+
         res.status(200).json(alldata)
         }
     } catch (error) {
@@ -107,6 +109,7 @@ router.post('/', isAuth, async(req, res)=> {
 router.get("/checkdate", isAuth, async(req, res) => {
     try {
         const checkdate = await ApptSummary.find({}, {date:1, time:1})
+
         if (checkdate === null) {
             res.status(400).json({msg: "Wrong ID"});
         } else {
@@ -148,7 +151,7 @@ router.get('/all', isAuthAdmin, async (req, res)=> {
 
 //Read one (for admin)
 router.get('/:id', isAuthAdmin, async (req, res)=> {
-    const {id} = req.params;
+    const { id } = req.params;
     try {
         const userApptHistory = await ApptSummary.findById(id).populate(["loginInfo", "medPrescription"]);
         const userProfile = await UserProfile.find({ loginInfo: userApptHistory.loginInfo._id }).populate(["loginInfo"]);
@@ -164,7 +167,7 @@ router.get('/:id', isAuthAdmin, async (req, res)=> {
 
 // Update
 router.put('/:id', isAuthAdmin, async(req, res)=> {
-    const {id} = req.params;
+    const { id } = req.params;
     const {purpose, billingInfo, summary, followUp, medPrescription} = req.body;
     try {
         const updateApptHistory = await ApptSummary.findByIdAndUpdate(id, {
@@ -183,7 +186,7 @@ router.put('/:id', isAuthAdmin, async(req, res)=> {
     } catch (error){
         res.status(500).json({msg: error});
     }
-    })
+})
 
 // user update profile
 router.put('/:id', isAuth, async(req, res)=> {
@@ -209,20 +212,19 @@ router.put('/:id', isAuth, async(req, res)=> {
 })
 
 // DELETE
-    router.delete('/:id', async(req, res)=> {
-        const {id} = req.params
-        try {
-            const deleteuser = await ApptSummary.findByIdAndDelete(id);
-            if (updateuser === null) {
-                res.status(400).json({msg: "Wrong ID"})
-            } else {
-                res.status(204).json(deleteuser)
-            }
-        
-        } catch (error){
-            res.status(500).json({msg: error})
+router.delete('/:id', isAuthAdmin, async(req, res)=> {
+    const { id } = req.params;
+    try {
+        const deleteApptHistory = await ApptSummary.findByIdAndDelete(id);
+        if (deleteApptHistory === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+            res.status(200).json({msg: "Redirecting to /admin/home"});
         }
-        })
+    } catch (error){
+        res.status(500).json({msg: error});
+    }
+});
     
     
     // EXPORT

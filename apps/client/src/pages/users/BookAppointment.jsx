@@ -22,6 +22,9 @@ export default function BookAppointment () {
         fetch('/api/apptsummary/checkdate')
         .then((response) => response.json())
         .then((data) => {
+            if(data.msg === "Not Authorized!"){
+                navigate("/");
+            }
             setUnavailableDate(data);
         });
     }, [])
@@ -199,8 +202,8 @@ export default function BookAppointment () {
                         </Form.Text>
                     </div>
                     </div>
-                    <div className="mb-3 text-center">
-                        <Button variant="primary" type="submit" disabled={disableButton}>
+                    <div className="mb-3 mt-5 text-center">
+                        <Button variant="primary" type="submit" className="p-3" disabled={disableButton}>
                             Book appointment
                         </Button>
                     </div>

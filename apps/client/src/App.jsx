@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
+import CoverPage from './pages/CoverPage'
 import Footer from './pages/Footer'
 
 import CreateProfile from './pages/users/CreateProfile'
@@ -17,9 +17,11 @@ import UserProfileUpdate from './pages/admin/UserProfileUpdate'
 function App() {
 
   return (
-    <div className="App">
+    <div className="App d-flex flex-column justify-content-between" style={{minHeight: "100vh"}}>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<CoverPage />} />
+          <Route path="/*" element={ <Navigate to="/" /> } />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signout" element={<Signout />} />
