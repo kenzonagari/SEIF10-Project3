@@ -1,4 +1,4 @@
-# H1 :hospital: HealthcarePal
+# :hospital: HealthcarePal
 GA SEIF 10 Project 3 - MERN-based full-stack app
 
 HealthcarePal is a one-stop healthcare portal for both patients and healthcare professionals to use, which covers appointment booking, appointment record-keeping and other things. 
