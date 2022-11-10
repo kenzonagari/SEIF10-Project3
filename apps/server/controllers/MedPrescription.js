@@ -64,15 +64,14 @@ router.get("/test2", async(req, res) => {
 })
 
 // ROUTES
-// CREATE (for admin)
+//* CREATE (for admin)
 router.post('/admin', isAuthAdmin, async(req, res)=> { 
     const {medicine, dosage, startDate, duration, instruction} = req.body;
-    console.log(startDate)
+
     //conditionals input check
-    if (medicine.length === 0 || dosage.length === 0 || startDate.length === 0 || duration.length === 0 || instruction.length === 0) {
+    if (medicine === "" || dosage === "" || startDate === "" || duration === "" || instruction === "") {
         return res.status(401).json({msg: "Please provide all the details"}); 
     }
-   const noBackDate = await MedPrescription
 
     try {
         const createMedPrescripton = await MedPrescription.create({
@@ -84,30 +83,24 @@ router.post('/admin', isAuthAdmin, async(req, res)=> {
         });
         if (createMedPrescripton === null) {
             res.status(400).json({msg: "Wrong ID"});
-            
         } else {
-        res.status(200).json(createMedPrescripton);
+            res.status(200).json(createMedPrescripton);
         }
     } catch (error) {
         res.status(500).json({msg: "Server Error"});
     }
-})
-
-// READ
-
-router.get('/', async (req, res)=> {
-    try {
-        const users = await MedPrescription.find().exec() //need google
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({error});
-    }
 });
 
-// UPDATE
+//* UPDATE
 router.put('/:id', isAuthAdmin, async(req, res)=> {
     const { id } = req.params;
     const {medicine, dosage, startDate, duration, instruction} = req.body;
+
+    //conditionals input check
+    if (medicine === "" || dosage === "" || startDate === "" || duration === "" || instruction === "") {
+        return res.status(401).json({msg: "Please provide all the details"}); 
+    }
+
     try {
         const updateMedPrescription = await MedPrescription.findByIdAndUpdate(id, {
             medicine: medicine,
@@ -123,25 +116,9 @@ router.put('/:id', isAuthAdmin, async(req, res)=> {
         }
     
     } catch (error){
-        res.status(500).json({msg: error})
+        res.status(500).json({msg: error});
     }
 });
-
-// DELETE
-    router.delete('/:id', async(req, res)=> {
-        const {id} = req.params
-        try {
-            const deleteuser = await MedPrescription.findByIdAndDelete(id);
-            if (updateuser === null) {
-                res.status(400).json({msg: "Wrong ID"});
-            } else {
-                res.status(204).json(deleteuser);
-            }
-        
-        } catch (error){
-            res.status(500).json({msg: error})
-        }
-        })
     
 // EXPORT
 module.exports = router;

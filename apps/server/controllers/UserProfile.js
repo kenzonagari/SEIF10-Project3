@@ -40,12 +40,25 @@ router.get("/seed", async(req, res) => {
     res.json(userprofile);
 })
 
+//  healthprofile (user can read medications, appt summary & billing)
+router.get("/test", async(req, res) => {
+    try {
+        const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"]);
+        if (alldata === null) {
+            res.status(400).json({msg: "Wrong ID"});
+        } else {
+        res.status(200).json(alldata);
+        }
+    } catch (error) {
+        res.status(500).json({ msg: error });
+        } 
+    })
+
 // ROUTES
 //* CREATE
 // user create profile
 router.post('/', isAuth, async(req, res)=> {
     req.body.loginInfo = req.session.user._id;
-    console.log(req.body);
     try {
         const createUserProfile = await UserProfile.create(req.body);
         res.status(200).json({msg: "Redirecting to /home"});
@@ -69,22 +82,9 @@ router.get('/', isAuth, async(req, res) => {
     }
 });
 
-//  healthprofile (user can read medications, appt summary & billing)
-router.get("/test", async(req, res) => {
-    try {
-        const alldata = await UserProfile.find({}).populate(["medPrescription", "apptSummary"]);
-        if (alldata === null) {
-            res.status(400).json({msg: "Wrong ID"});
-        } else {
-        res.status(200).json(alldata);
-        }
-    } catch (error) {
-        res.status(500).json({ msg: error });
-        } 
-    })
 
 //admin read user profile
-router.get('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
+router.get('/admin/:id', isAuthAdmin, async(req, res) => {
     const { id } = req.params;
     try {
         const adminUserProfileRead = await UserProfile.findById(id).populate(["loginInfo"]);
@@ -96,7 +96,7 @@ router.get('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
     } catch (error) {
         res.status(500).json({msg: error});
     }
-})
+});
 
 //* UPDATE
 // user update user profile
@@ -120,10 +120,10 @@ router.put('/:id', isAuth, async(req, res)=> {
     } catch (error){
         res.status(500).json({ msg: "server error" });
     }
-})
+});
 
 // admin update user profile
-router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
+router.put('/admin/:id', isAuthAdmin, async(req, res) => {
     const { id } = req.params;
     const {dateOfBirth, sex, mobile, ic, medAllergies, pastIllnesses} = req.body;
 
@@ -143,27 +143,26 @@ router.put('/admin/:id', isAuthAdmin, async(req, res) => { //need isAuthAdmin
             res.status(200).json({msg: "Redirecting to /admin/home"});
         }
     } catch (error) {
-        res.status(500).json({msg: "input error"})
+        res.status(500).json({msg: "input error"});
     }
-})
+});
 
-//* DELETE
-// only admin can delete user profile
-router.delete('/admin/:id', isAuthAdmin, async(req, res)=> {
-    const {id} = req.params
-    try {
-        const deleteuser = await UserProfile.findByIdAndDelete(id);
-        if (deleteuser === null) {
-            res.status(400).json({msg: "Wrong ID"});
-        } else {
-            res.status(204).json(deleteuser);
-        }
+// //* DELETE
+// // only admin can delete user profile
+// router.delete('/admin/:id', isAuthAdmin, async(req, res)=> {
+//     const {id} = req.params
+//     try {
+//         const deleteuser = await UserProfile.findByIdAndDelete(id);
+//         if (deleteuser === null) {
+//             res.status(400).json({msg: "Wrong ID"});
+//         } else {
+//             res.status(204).json(deleteuser);
+//         }
     
-    } catch (error){
-        res.status(500).json({msg: error})
-    }
-})
-
+//     } catch (error){
+//         res.status(500).json({msg: error})
+//     }
+// });
 
 // EXPORT
 module.exports = router;
