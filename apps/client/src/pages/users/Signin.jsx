@@ -74,7 +74,7 @@ export default function Signin () {
         </div>;
 
     return(
-        <>
+        <div>
             <p className="fw-bold text-center my-4" style={{fontSize: "3em", color:"#FD6666"}}>HealthcarePal</p>
             <div className="card m-4 p-4 mx-auto" style={{ width: "30rem" }}>
                 <div className="mb-3 text-center">
@@ -105,6 +105,6 @@ export default function Signin () {
                 </Form>
                 <p className="mb-3 text-center">Don't have an account? <a href="/signup" onClick={handleClick}>Sign up here.</a></p>
             </div>
-        </>
+        </div>
     )
 }

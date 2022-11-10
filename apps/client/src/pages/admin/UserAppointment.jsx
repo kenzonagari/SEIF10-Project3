@@ -15,6 +15,9 @@ export default function UserAppointment () {
         fetch(`/api/apptsummary/${apptId}`)
             .then((response) => response.json())
             .then((data) => {
+                if(data.msg === "Not Authorized!"){
+                    return navigate("/");
+                }
                 setApptInfoData(data["userApptHistory"]);
                 setuserProfileInfo(data["userProfile"][0]);
             });

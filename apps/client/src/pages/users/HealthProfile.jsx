@@ -1,17 +1,21 @@
 import { Table } from 'react-bootstrap'
 import { useState } from "react"
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function HealthProfile ({userProfileInfo}) {
 
     const [apptInfo, setApptInfo] = useState([]); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('/api/apptsummary/')
         .then((response) => response.json())
         .then((data) => {
-            // console.log(data);
+            if(data.msg === "Not Authorized!"){
+                navigate("/");
+            }
             setApptInfo(data);
         });
     }, []);
