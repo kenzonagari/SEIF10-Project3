@@ -28,7 +28,6 @@ export default function UserAppointment () {
     }
 
     const handleDeleteAppt = () => {
-        console.log("deletin...");
         //DELETE
         fetch(`/api/apptsummary/${apptId}`,     {   method: "DELETE", 
                                                     headers: {
