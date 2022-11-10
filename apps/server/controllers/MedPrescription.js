@@ -67,6 +67,13 @@ router.get("/test2", async(req, res) => {
 // CREATE (for admin)
 router.post('/admin', isAuthAdmin, async(req, res)=> { 
     const {medicine, dosage, startDate, duration, instruction} = req.body;
+    console.log(startDate)
+    //conditionals input check
+    if (medicine.length === 0 || dosage.length === 0 || startDate.length === 0 || duration.length === 0 || instruction.length === 0) {
+        return res.status(401).json({msg: "Please provide all the details"}); 
+    }
+   const noBackDate = await MedPrescription
+
     try {
         const createMedPrescripton = await MedPrescription.create({
             medicine: medicine,
@@ -75,7 +82,12 @@ router.post('/admin', isAuthAdmin, async(req, res)=> {
             duration: duration,
             instruction: instruction
         });
+        if (createMedPrescripton === null) {
+            res.status(400).json({msg: "Wrong ID"});
+            
+        } else {
         res.status(200).json(createMedPrescripton);
+        }
     } catch (error) {
         res.status(500).json({msg: "Server Error"});
     }
@@ -121,9 +133,9 @@ router.put('/:id', isAuthAdmin, async(req, res)=> {
         try {
             const deleteuser = await MedPrescription.findByIdAndDelete(id);
             if (updateuser === null) {
-                res.status(400).json({msg: "Wrong ID"})
+                res.status(400).json({msg: "Wrong ID"});
             } else {
-                res.status(204).json(deleteuser)
+                res.status(204).json(deleteuser);
             }
         
         } catch (error){
