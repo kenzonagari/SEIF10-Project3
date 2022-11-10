@@ -106,7 +106,7 @@ export default function UserAppointment () {
                     </div>
 
                     <div className="d-flex flex-row justify-content-around my-4">
-                        <button type="button" className="btn btn-primary p-3" onClick={handleUpdateAppt}>Update Appointment Record</button>
+                        <button type="button" className="btn btn-primary p-3" onClick={handleUpdateAppt} disabled={apptInfoData?.apptCompleted}>Update Appointment Record</button>
                         <button type="button" className="btn btn-danger p-3" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete Appointment Record</button>
                     </div>
 

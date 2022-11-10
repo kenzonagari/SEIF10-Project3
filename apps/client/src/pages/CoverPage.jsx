@@ -13,7 +13,7 @@ export default function CoverPage () {
                         <path d="M5 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1V1Zm2 14h2v-3H7v3Zm3 0h1V3H5v12h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3Zm0-14H6v1h4V1Zm2 7v7h3V8h-3Zm-8 7V8H1v7h3Z"/>
                     </svg>
                     <p className="fw-bold" style={{fontSize: "4em"}}>HealthcarePal</p>
-                    <p className="lead">A one-stop healthcare app for patients and administrators.</p>
+                    <p className="lead">A one-stop app for <b>patients</b> and <b>healthcare administrators</b>.</p>
                 </main>
                 <div className="d-flex flex-row justify-content-around text-center" style={{width: "40%"}}>
                     <a href="/signup" style={{textDecoration: "none", color: "white"}}><p className="fs-5 fw-bold p-4 rounded-3 bg-light bg-opacity-10">Sign Up</p></a>
