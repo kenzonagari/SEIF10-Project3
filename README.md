@@ -8,6 +8,7 @@ To simplify the user healthcare journey by accessing health information and serv
 
 In this portal, patient can create and update user profile, book appointment, view appointment and medication. Admin or healthcare professionals are able to create appointment summary and medication, read, update and delete all user profiles.
 
+
 ![WEBSITE](website.png)
 
 Try it out here!  [HealthcarePal](https://healthcarepal.cyclic.app/)
@@ -17,3 +18,6 @@ As a user, I would like to:
 
 ## User Journey
 ![WIREFRAME](wireframe.png)
+
+Try it out here: [HealthcarePal] (https://healthcarepal.cyclic.app/)
+
