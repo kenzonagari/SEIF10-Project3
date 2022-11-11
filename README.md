@@ -28,9 +28,13 @@ As an admin, I would like to:
 3. Create appointment summary (diagnosis), medication order and billing info
 4. Delete appointment list
 
+## Flowchart
+Our initial plan of the website:
+<img src="https://i.imgur.com/AFup0AZ.png" width="900">
+
 ## Wireframe
 We used Figma to create our wireframe:
-<img src="https://i.imgur.com/9Zwqx0G.png" width="1000">
+<img src="https://i.imgur.com/9Zwqx0G.png" width="900">
 <img src="https://i.imgur.com/QpYb0iB.png" width="1000">
 1. Patient's need to see doctor
 2. Checking for availability -> schedule appointment
@@ -49,18 +53,14 @@ Backend
 2. Mongodb + Mongoose
 3. Node.js
 
-## Challenges
-
 ## Screenshots
-Sign Up and Sign In
+Sign Up and Sign In 
 <img src="https://i.imgur.com/EQWeFbB.png" width="1000">
-
 User Home Page and Book Appointment 
 <img src="https://i.imgur.com/wPQ23Rf.png" width="1000">
-
 Admin Home Page and Appointment Overview
 <img src="https://i.imgur.com/GPN5TP9.png" width="1000">
 
-Orrr you can try it out yourself here! -> [HealthcarePal](https://healthcarepal.cyclic.app/)
+Or you can try it out yourself here!  :link:  **[HealthcarePal](https://healthcarepal.cyclic.app/)**
 
 
