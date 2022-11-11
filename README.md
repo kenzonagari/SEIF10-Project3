@@ -8,8 +8,7 @@ We want to simplify the user healthcare journey by accessing health information 
 
 In this portal, patient can create and update user profile, book appointment, view appointment and medication. Admin or healthcare professionals are able to create appointment summary and medication, read, update all user profiles and also delete appointment records.
 
-
-![WEBSITE](https://imgur.com/XxEBZnL)
+<img src="https://i.imgur.com/XxEBZnL.png" width="700">
 
 Try it out here!  [HealthcarePal](https://healthcarepal.cyclic.app/)
 
@@ -31,7 +30,7 @@ As an admin, I would like to:
 4. Delete appointment list
 
 ## User/Admin Journey
-![WIREFRAME](https://imgur.com/9Zwqx0G)
+<img src="https://i.imgur.com/9Zwqx0G.png" width="1000">
 // will continue this part tmr
 
 ## Technologies used
