@@ -4,7 +4,7 @@ GA SEIF 10 Project 3 - MERN-based full-stack app
 HealthcarePal is a one-stop healthcare app for both patients and healthcare professionals to use, which covers appointment booking, appointment record-keeping and other things. 
 
 ## Motivation
-To simplify the user healthcare journey by accessing health information and services anytime and anywhere.
+We want to simplify the user healthcare journey by accessing health information and services anytime and anywhere.
 
 In this portal, patient can create and update user profile, book appointment, view appointment and medication. Admin or healthcare professionals are able to create appointment summary and medication, read, update all user profiles and also delete appointment records.
 
@@ -37,12 +37,12 @@ As an admin, I would like to:
 ## Technologies used
 Frontend
 1. React
-2. FullCalender
+2. FullCalendar
 3. bootstrap
 
 Backend
 1. Express
-2. Mongodb
+2. Mongodb + Mongoose
 3. Node.js
 
 
