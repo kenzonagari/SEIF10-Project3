@@ -1,17 +1,24 @@
 import NavigationBar from "./Navbar"
 import { Card } from "react-bootstrap"
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import HeaderFunction from "./Header";
+import ToastElement from "../Toast";
 
 export default function UserAppointment () {
 
     const navigate = useNavigate();
+    const location = useLocation();
     const { apptId } = useParams();
     const [apptInfoData, setApptInfoData] = useState({});
     const [userProfileInfo, setuserProfileInfo] = useState({});
+    const [toastStatus, setToastStatus] = useState(false);
 
     useEffect(() => {
+        if(location?.state?.msg){
+            setToastStatus(true);
+        }
+
         fetch(`/api/apptsummary/${apptId}`)
             .then((response) => response.json())
             .then((data) => {
@@ -39,18 +46,23 @@ export default function UserAppointment () {
             })
             .then((data) => {
                 if(data.msg === "Redirecting to /admin/home"){
-                    return navigate(`/admin/home`);
+                    return navigate(`/admin/home`, {state:{msg: "Appointment info successfully deleted!"}});
                 } else {
-                    return;
+                    return navigate(`/admin/home`, {state:{msg: "Deleting failed. Please try again later!"}});
                 }
             });
     }
 
     const medLine = `${apptInfoData?.medPrescription?.medicine} | ${apptInfoData?.medPrescription?.dosage} | ${apptInfoData?.medPrescription?.instruction}`;
 
+    const toast = <ToastElement msg={location?.state?.msg} />;
+
     return (
         <>
         <div className="body">
+            <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{zIndex: 11}}>
+                {toastStatus ? toast : ""}
+            </div>
             <HeaderFunction />
             <div className="d-flex flex-row">
                 <NavigationBar userProfileInfo={userProfileInfo} />

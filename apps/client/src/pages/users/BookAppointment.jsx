@@ -5,6 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClic
 import { Form, Button } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ToastElement from '../Toast';
 
 const warningText = {
     invalidDateTime: "Date and time provided are invalid!"
@@ -93,15 +94,13 @@ export default function BookAppointment () {
             .then((data) => {
                 // console.log(data)
                 if(data.msg === "Booking successful"){
-                    setError("");
-                    return navigate("/healthProfile");
+                    return navigate("/healthProfile", {state:{msg: "Booking successful!"}});
                 } else 
                 if(data.msg === "Server error"){
-                    return setError("Server error");
+                    return navigate("/healthProfile", {state:{msg: "Booking failed. Please try again later."}});
                 }
             });
 
-        setDisableButton(false);
     }
 
     const warningPopup = 
@@ -146,7 +145,6 @@ export default function BookAppointment () {
 
     return(
         <div className="card m-4 p-5" style={{ width: "60rem", height: "fit-content" }}>
-
             <div className="user-profile">
                 <h2 className="card-title mb-4">Book An Appointment</h2>
                 <Form onSubmit={handleSubmit}>
@@ -209,7 +207,6 @@ export default function BookAppointment () {
                     </div>
                 </Form>
             </div>
-
         </div>
     )
 }

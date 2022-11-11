@@ -63,11 +63,11 @@ export default function UserProfileUpdate () {
             .then((data) => {
                 if(data.msg === "Redirecting to /admin/home"){
                     setError("");
-                    return navigate(`/admin/home`);
+                    return navigate(`/admin/home`, {state:{msg: "User info successfully updated!"}});
                 } else {
                     setError("Server error");
                     setDisableButton(false);
-                    return;
+                    return navigate(`/admin/home`, {state:{msg: "User info update failed. Please try again later!"}});
                 }
             });
     }
