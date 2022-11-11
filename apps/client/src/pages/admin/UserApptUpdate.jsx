@@ -65,11 +65,11 @@ export default function UserApptUpdate () {
                         .then((data) => {
                             if(data.msg === "Update successful"){
                                 setError("");
-                                return navigate(`/admin/userAppointment/${apptId}`);
+                                return navigate(`/admin/userAppointment/${apptId}`, {state:{msg: "Appointment info successfully updated!"}});
                             } else {
                                 setError("Server error");
                                 setDisableButton(false);
-                                return;
+                                return navigate(`/admin/userAppointment/${apptId}`, {state:{msg: "Update failed. Please try again later!"}});
                             }
                         });
                 });
@@ -96,11 +96,11 @@ export default function UserApptUpdate () {
                         .then((data) => {
                             if(data.msg === "Update successful"){
                                 setError("");
-                                return navigate(`/admin/userAppointment/${apptId}`);
+                                return navigate(`/admin/userAppointment/${apptId}`, {state:{msg: "Appointment info successfully updated!"}});
                             } else {
                                 setError("Server error");
                                 setDisableButton(false);
-                                return;
+                                return navigate(`/admin/userAppointment/${apptId}`, {state:{msg: "Update failed. Please try again later!"}});
                             }
                         });
                 });

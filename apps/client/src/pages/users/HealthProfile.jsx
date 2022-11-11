@@ -1,15 +1,22 @@
-import { Table } from 'react-bootstrap'
-import { useState } from "react"
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
+import { useState } from "react";
+import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ToastElement from '../Toast';
 
 
 export default function HealthProfile ({userProfileInfo}) {
 
     const [apptInfo, setApptInfo] = useState([]); 
     const navigate = useNavigate();
+    const location = useLocation();
+    const [toastStatus, setToastStatus] = useState(false);
 
     useEffect(() => {
+        if(location?.state?.msg){
+            setToastStatus(true);
+        }
+
         fetch('/api/apptsummary/')
         .then((response) => response.json())
         .then((data) => {
@@ -79,9 +86,13 @@ export default function HealthProfile ({userProfileInfo}) {
         }
     }
 
+    const toast = <ToastElement msg={location?.state?.msg} />;
+
     return (
         <div className="card m-4 p-3" style={{ "width": "100rem", "height": "fit-content" }}>
-
+            <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{zIndex: 11}}>
+                {toastStatus ? toast : ""}
+            </div>
             <div className="card-body">
                 <h2 className="card-title mb-4">Health Profile</h2>
                 <div className="card m-1 p-3" style={{ "width": "100%", "height": "fit-content" }}>

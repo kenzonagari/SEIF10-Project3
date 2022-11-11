@@ -1,42 +1,49 @@
 import { useState, useEffect } from 'react'
 import { Table } from 'react-bootstrap'
 import HeaderFunction from './Header'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import ToastElement from '../Toast';
 
 export default function AdminHome () {
 
     const [apptData, setApptData] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const [toastStatus, setToastStatus] = useState(false); 
 
     useEffect(() => {
+        if(location?.state?.msg){
+            setToastStatus(true);
+        }
+
         fetch('/api/apptsummary/all')
-        .then((response) => response.json())
-        .then((data) => {
-            if(data.msg === "server error"){
-                return navigate("/signin");
-            } else if(data.msg === "Not Authorized!"){
-                return navigate("/");
-            }
-            data.sort((a,b) => {
-                if (a.date < b.date) {
-                    return -1;
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.msg === "server error"){
+                    return navigate("/signin");
+                } else if(data.msg === "Not Authorized!"){
+                    return navigate("/");
                 }
-                if (a.date > b.date) {
-                    return 1;
-                }
-                if (a.date.slice(0,10) === b.date.slice(0,10)){
-                    if (a.time < b.time) {
+                data.sort((a,b) => {
+                    if (a.date < b.date) {
                         return -1;
                     }
-                    if (a.time > b.time) {
+                    if (a.date > b.date) {
                         return 1;
                     }
-                }
+                    if (a.date.slice(0,10) === b.date.slice(0,10)){
+                        if (a.time < b.time) {
+                            return -1;
+                        }
+                        if (a.time > b.time) {
+                            return 1;
+                        }
+                    }
 
-                return 0;
+                    return 0;
+                });
+                setApptData(data);
             });
-            setApptData(data);
-        });
     }, [])
 
     const handleClick = (appt) => () => {
@@ -58,9 +65,14 @@ export default function AdminHome () {
         )
     });
 
+    const toast = <ToastElement msg={location?.state?.msg} />;
+
     return (
         <>
             <HeaderFunction />
+            <div className="toast-container position-fixed bottom-0 end-0 p-3" style={{zIndex: 11}}>
+                {toastStatus ? toast : ""}
+            </div>
             <div className="card m-5 p-2">
                 <div className="card-body">
                     <div className='text-center m-3 mb-5'>

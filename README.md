@@ -41,8 +41,8 @@ We used Figma to create our wireframe:
 ## Technologies used
 Frontend
 1. React
-2. FullCalendar
-3. Bootstrap
+2. Bootstrap + React-Bootstrap
+3. FullCalendar.js
 
 Backend
 1. Express
