@@ -29,7 +29,7 @@ As an admin, I would like to:
 4. Delete appointment list
 
 ## Flowchart
-Our initial plan of the website:
+Our initial plan of the website. After deciding on the CRUD actions user and admin can perform, we decided on 4 main database models: 
 <img src="https://i.imgur.com/AFup0AZ.png" width="900">
 
 ## Wireframe
